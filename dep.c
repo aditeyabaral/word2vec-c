@@ -16,21 +16,19 @@ int getHashvalue(char *word, int vocab_size)
     val%= vocab_size;
     return val;
 }
-void insert(NODE node, EMBEDDING* model)
-{
-    int index = getHashvalue(node.word, model->vocab_size);
-    while(model->hashtable[index].mark == true)
-    {
-        if(hastable[index].key == key)
-            return;
-        index = (index+1)%size;
-    }
-    h[index].key = key;
-    h[index].mark = 1;
-    strcpy(h[index].name,name);
-    len++;
-}
 
+void insert(NODE* node, EMBEDDING* model)
+{
+    int index = getHashvalue(node->word, model->vocab_size);
+    while(model->hashtable[index]->mark == true)
+    {
+        if(!strcmp(model->hashtable[index]->word, node->word))
+            return;
+        index = (index+1)%model->vocab_size;
+    }
+    model->hashtable[index] = node;
+    model->hashtable[index]->mark = true;
+}
 
 void init(EMBEDDING *model)
 {
@@ -97,12 +95,23 @@ char* trim(char* word)
     int pos1 = 0, pos2 = 0;
     while(word[pos1]==' ')
         pos1++;
-    while(word[pos1]!=' ')
+    while(word[pos1]!=' ' && word[pos1]!='\0')
+    {
         s[pos2] = word[pos1];
         pos1++;
         pos2++;
+    }
     s[pos2] = '\0';
     return s;
+}
+
+int getVocabularySize(char* corpus)
+{
+    int len = strlen(corpus);
+    char* temp1 = (char*)malloc(sizeof(char)*len);
+    char* temp2 = (char*)malloc(sizeof(char)*len);
+    strcpy(temp1, corpus);
+    char* token1;
 }
 
 void OneHotEncoding(EMBEDDING* model, char* corpus)
@@ -110,8 +119,7 @@ void OneHotEncoding(EMBEDDING* model, char* corpus)
     char* cleaned_corpus = remove_punctuations(corpus);
     char* token=strtok(cleaned_corpus, " ");
 	char word[30];
-    //create vocabulary here
-    model->vocab_size = 0;
+    model->vocab_size = getVocabularySize(cleaned_corpus);
     while (token != NULL)
     {
         strcpy(word, token);

@@ -21,7 +21,7 @@ struct embedding
     float **W2;
     float **b1;
     float **b2;
-    NODE *hashtable;
+    NODE **hashtable;
 };
 typedef struct embedding EMBEDDING;
 
@@ -30,4 +30,7 @@ void init(EMBEDDING*);
 float** createArray(int, int, int);
 void display(float**, int, int);
 char* remove_punctuations(char*);
+int getVocabularySize(char*);
+char* trim(char*);
+void OneHotEncoding(EMBEDDING*, char*);
 void train(EMBEDDING*, int, int, float, char*);
