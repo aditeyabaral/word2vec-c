@@ -97,14 +97,26 @@ void insert(NODE* node, EMBEDDING* model)
     //model->hashtable[index]->mark = true;
 }
 
-void initialiseModelParameters(EMBEDDING *model)
+EMBEDDING* initialiseModelParameters(int C, int N, float alpha)
 {
-    model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
+    EMBEDDING* model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
     model->hashtable = NULL;
-    model->context = 2;
-    model->alpha = 0.01;
-    model->context = 2;
-    model->dimension = 100;
+
+    if (C > 0)
+        model->context = C;
+    else
+        model->context = 2;
+
+    if (N > 0)
+        model->dimension = N;
+    else
+        model->dimension = 100;
+
+    if (alpha > 0)
+        model->alpha = alpha;
+    else
+        model->alpha = 0.01;
+    return model;
 }
 
 void initialiseModelHashtable(EMBEDDING* model)
@@ -316,16 +328,11 @@ void createHashtable(EMBEDDING* model, char* corpus)
     }
 }
 
-void train(EMBEDDING* model, int C, int N, float alpha, char* corpus)
+void train(int C, int N, float alpha, char* corpus)
 {
-    if (C > 0)
-        model->context = C;
-    if (N > 0)
-        model->dimension = N;
-    if (alpha > 0)
-        model->alpha = alpha;
+    EMBEDDING* model = initialiseModelParameters(C, N, alpha);
     createHashtable(model, corpus);
-    displayHashtable(model);
+    //displayHashtable(model);
     /*
     Aronya - 
     Get one hot vectors for words in vocabulary. model stores size of vocabulary and vocabulary in vocab_size

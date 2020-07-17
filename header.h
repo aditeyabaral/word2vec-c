@@ -29,7 +29,7 @@ typedef struct embedding EMBEDDING;
 
 float relu(float);
 float** softmax(float** M, int m, int n, int axis);
-void initialiseModelParameters(EMBEDDING*);
+EMBEDDING* initialiseModelParameters(int C, int N, float alpha);
 void initialiseModelHashtable(EMBEDDING*);
 float** createArray(int, int, int);
 float** createZerosArray(int m, int n);
@@ -41,4 +41,4 @@ int getVocabularySize(EMBEDDING*, char*);
 char* trim(char*);
 float** createOneHot(NODE* node, EMBEDDING* model);
 void createHashtable(EMBEDDING*, char*);
-void train(EMBEDDING* model, int C, int N, float alpha, char* corpus);
+void train(int C, int N, float alpha, char* corpus);
