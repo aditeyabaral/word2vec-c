@@ -63,6 +63,30 @@ float** createArray(int m, int n, int random_state)
     return array;
 }
 
+float** createZerosArray(int m, int n)
+{
+    float** array = (float**)malloc(sizeof(float*)*m);
+    for(int i = 0; i<m ;i++)
+    {
+        array[i] = (float*)malloc(sizeof(float)*n);
+        for(int j = 0; j<n; j++)
+            array[i][j] = 0;
+    }
+    return array;
+}
+
+float** createOnesArray(int m, int n)
+{
+    float** array = (float**)malloc(sizeof(float*)*m);
+    for(int i = 0; i<m ;i++)
+    {
+        array[i] = (float*)malloc(sizeof(float)*n);
+        for(int j = 0; j<n; j++)
+            array[i][j] = 1;
+    }
+    return array;
+}
+
 void displayArray(float **a, int m, int n)
 {
     for(int i = 0; i<m ;i++)
@@ -71,6 +95,21 @@ void displayArray(float **a, int m, int n)
             printf("%f ", a[i][j]);
         printf("\n");
     }
+}
+
+float** multiply(float **M1, float **M2, int m1, int n1, int m2, int n2)
+{
+    float **result = createZerosArray(m1, n2);
+    displayArray(result, m1, n2);
+    for(int i = 0; i<m1 ;i++)
+    {
+        for(int j=0; j<n2 ;j++)
+        {
+            for(int k=0; k<m2; k++)
+                result[i][j]+= M1[i][k] + M2[k][j];
+        }
+    }
+    return result;
 }
 
 void displayHashtable(EMBEDDING* model)
@@ -195,7 +234,7 @@ void train(EMBEDDING* model, int C, int N, float alpha, char* corpus)
     if (alpha > 0)
         model->alpha = alpha;
     createHashtable(model, corpus);
-    
+
     //displayHashtable(model);
     /*
     Aronya - 
