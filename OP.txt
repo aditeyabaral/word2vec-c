@@ -1,0 +1,29 @@
+Input: 
+hello world aditeya baral hello i am the best and i am amaze 
+
+m: 9
+
+X: 
+hello world baral hello 
+world aditeya hello i 
+aditeya baral i am 
+baral hello am the 
+hello i the best 
+i am best and 
+am the and i 
+the best i am 
+best and am amaze 
+
+
+y: 
+aditeya
+baral
+hello
+i
+am
+the
+best
+and
+i
+
+

@@ -2,75 +2,80 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-float** createArray(int m, int n, int random_state)
-{
-    srand(random_state);
-    float** array = (float**)malloc(sizeof(float*)*m);
-    for(int i = 0; i<m ;i++)
-    {
-        array[i] = (float*)malloc(sizeof(float)*n);
-        for(int j = 0; j<n; j++)
-            array[i][j] = (float)rand()/(float)(RAND_MAX);
-    }
-    return array;
-}
+#include <limits.h>
 
-float** createZerosArray(int m, int n)
+void createXandY(char* s, int context)
 {
-    float** array = (float**)malloc(sizeof(float*)*m);
-    for(int i = 0; i<m ;i++)
+    int num_words = 0;
+    int len = strlen(s);
+    char* token1 , *save1;
+    char* temp1 = (char*)malloc(sizeof(char)*len);
+    strcpy(temp1, s);
+    token1 = strtok_r(temp1, " ", &save1);
+    while(token1 != NULL)
     {
-        array[i] = (float*)malloc(sizeof(float)*n);
-        for(int j = 0; j<n; j++)
-            array[i][j] = 0;
+        num_words++;
+        token1 = strtok_r(NULL, " ", &save1);
     }
-    return array;
-}
-
-float** createOnesArray(int m, int n)
-{
-    float** array = (float**)malloc(sizeof(float*)*m);
-    for(int i = 0; i<m ;i++)
+    if ((2*context+1)>=num_words)
     {
-        array[i] = (float*)malloc(sizeof(float)*n);
-        for(int j = 0; j<n; j++)
-            array[i][j] = 1;
+        printf("Not enough words available for context. Window >= number of words.\n");
+        return;
     }
-    return array;
-}
+    int ctr1 = 1, ctr2 = 1;
+    char* temp2 = (char*)malloc(sizeof(char)*len);
+    strcpy(temp1, s);
+    token1 = strtok_r(temp1, " ", &save1);
+    char* token2, *save2;
 
-void displayArray(float **a, int m, int n)
-{
-    for(int i = 0; i<m ;i++)
-    {
-        for(int j = 0; j<n; j++)
-            printf("%f ", a[i][j]);
-        printf("\n");
-    }
-}
+    int m = 1+(num_words%(2*context+1));
+    char* X_words = (char*)malloc(sizeof(char)*INT_MAX);
+    char* y_words = (char*)malloc(sizeof(char)*INT_MAX);
 
-float** multiply(float **M1, float **M2, int m1, int n1, int m2, int n2)
-{
-    float **result = createZerosArray(m1, n2);
-    displayArray(result, m1, n2);
-    for(int i = 0; i<m1 ;i++)
+    while(token1 != NULL && ctr1 <= (num_words-2*context))
     {
-        for(int j=0; j<n2 ;j++)
+        ctr2 = 1;
+        strcpy(temp2, s);
+        token2 = strtok_r(temp2, " ", &save2);
+        while(token2 != NULL && ctr2!=ctr1)
         {
-            for(int k=0; k<m2; k++)
-                result[i][j]+= M1[i][k] + M2[k][j];
+            token2 = strtok_r(NULL, " ", &save2);
+            ctr2++;
         }
+        for(int i=1;i<=context;i++)
+        {
+            strcat(X_words, token2);
+            strcat(X_words, " ");
+            token2 = strtok_r(NULL, " ", &save2);
+        }
+        strcat(y_words, token2);
+        strcat(y_words, "\n");
+        token2 = strtok_r(NULL, " ", &save2);
+        for(int i=1;i<=context;i++)
+        {
+            strcat(X_words, token2);
+            strcat(X_words, " ");
+            token2 = strtok_r(NULL, " ", &save2);
+        }
+        strcat(X_words, "\n");
+        ctr1++;
+        token1 = strtok_r(NULL, " ", &save1);
     }
-    return result;
+
+    printf("Input: \n");
+    printf("%s\n\n", s);
+    printf("X: \n");
+    printf("%s\n\n", X_words);
+    printf("y: \n");
+    printf("%s\n\n", y_words);
 }
+
+
 
 int main()
 {
-    int m1 = 1, n1 = 2, m2 = 2, n2 = 5;
-    float **M1 = createArray(m1, n1, 0);
-    float **M2 = createArray(m2, n2, 0);
-    displayArray(M1, m1, n1);
-    displayArray(M2, m2, n2);
-    float **result = multiply(M1, M2, m1, n1, m2, n2);
-    displayArray(result, m1, n2);
+    char *s = (char*)malloc(sizeof(char)*INT_MAX);
+    scanf("%[^\\0]s", s);
+    createXandY(s, 2);
+    return 0;
 }

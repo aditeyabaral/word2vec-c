@@ -92,8 +92,10 @@ void insert(NODE* node, EMBEDDING* model)
         if(!strcmp(model->hashtable[index]->word, node->word))
             return;
         index = (index+1)%model->vocab_size;
+        
     }
     model->hashtable[index] = node;
+    //displayHashtable(model);
     //model->hashtable[index]->mark = true;
 }
 
@@ -101,6 +103,7 @@ EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, float alpha)
 {
     EMBEDDING* model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
     int len = strlen(corpus);
+    model->corpus_length = len;
     model->corpus = (char*)malloc(sizeof(char)*len);
     model->clean_corpus = (char*)malloc(sizeof(char)*len);
     char* cleaned_corpus = remove_punctuations(corpus);
@@ -356,8 +359,69 @@ void createHashtable(EMBEDDING* model, char* corpus)
 void createXandY(EMBEDDING* model)
 {
     int num_words = 0;
-    char* token , *save;
-    
+    char* token1 , *save1;
+    char* temp1 = (char*)malloc(sizeof(char)*model->corpus_length);
+    strcpy(temp1, model->clean_corpus);
+    token1 = strtok_r(temp1, " ", &save1);
+    while(token1 != NULL)
+    {
+        num_words++;
+        token1 = strtok_r(NULL, " ", &save1);
+    }
+    if ((2*model->context+1) >= num_words)
+    {
+        printf("Not enough words available for context. Window >= number of words.\n");
+        return;
+    }
+    int ctr1 = 1, ctr2 = 1;
+    char* temp2 = (char*)malloc(sizeof(char)*model->corpus_length);
+    strcpy(temp1, model->clean_corpus);
+    token1 = strtok_r(temp1, " ", &save1);
+    char* token2, *save2;
+
+    //int m = 1+(num_words%(2*model->context+1)); //Number of possible examples = X and y have 'm' columns
+    char* X_words = (char*)malloc(sizeof(char)*INT_MAX);
+    char* y_words = (char*)malloc(sizeof(char)*INT_MAX);
+
+    while(token1 != NULL && ctr1 <= (num_words-2*model->context))
+    {
+        ctr2 = 1;
+        strcpy(temp2, model->clean_corpus);
+        token2 = strtok_r(temp2, " ", &save2);
+        while(token2 != NULL && ctr2!=ctr1)
+        {
+            token2 = strtok_r(NULL, " ", &save2);
+            ctr2++;
+        }
+        for(int i=1;i<=model->context;i++)
+        {
+            strcat(X_words, token2);
+            strcat(X_words, " ");
+            token2 = strtok_r(NULL, " ", &save2);
+        }
+        strcat(y_words, token2);
+        strcat(y_words, "\n");
+        token2 = strtok_r(NULL, " ", &save2);
+        for(int i=1;i<=model->context;i++)
+        {
+            strcat(X_words, token2);
+            strcat(X_words, " ");
+            token2 = strtok_r(NULL, " ", &save2);
+        }
+        strcat(X_words, "\n");
+        ctr1++;
+        token1 = strtok_r(NULL, " ", &save1);
+    }
+
+    int m = ctr1-1;
+    printf("Input: \n");
+    printf("%s\n\n", model->clean_corpus);
+    printf("m: %d\n\n", m);
+    printf("X: \n");
+    printf("%s\n\n", X_words);
+    printf("y: \n");
+    printf("%s\n\n", y_words);
+
 }
 
 void train(char* corpus, int C, int N, float alpha, int random_state)
@@ -368,6 +432,6 @@ void train(char* corpus, int C, int N, float alpha, int random_state)
     model->W2 = createArray(model->vocab_size, model->dimension, random_state);
     model->b1 = createArray(model->dimension, 1, random_state);
     model->b2 = createArray(model->vocab_size, 1, random_state);
-    displayModel(model);
-    //createXandY(model)
+    //displayModel(model);
+    createXandY(model);
 }

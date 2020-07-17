@@ -18,6 +18,7 @@ struct embedding
     float alpha;
     int dimension;
     int vocab_size;
+    int corpus_length;
     float **W1;
     float **W2;
     float **b1;
