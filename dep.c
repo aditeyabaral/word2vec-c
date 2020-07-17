@@ -195,6 +195,7 @@ void train(EMBEDDING* model, int C, int N, float alpha, char* corpus)
     if (alpha > 0)
         model->alpha = alpha;
     createHashtable(model, corpus);
+    
     //displayHashtable(model);
     /*
     Aronya - 
