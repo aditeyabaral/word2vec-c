@@ -97,9 +97,15 @@ void insert(NODE* node, EMBEDDING* model)
     //model->hashtable[index]->mark = true;
 }
 
-EMBEDDING* initialiseModelParameters(int C, int N, float alpha)
+EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, float alpha)
 {
     EMBEDDING* model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
+    int len = strlen(corpus);
+    model->corpus = (char*)malloc(sizeof(char)*len);
+    model->clean_corpus = (char*)malloc(sizeof(char)*len);
+    char* cleaned_corpus = remove_punctuations(corpus);
+    strcpy(model->clean_corpus, cleaned_corpus);
+    strcpy(model->corpus, corpus);
     model->hashtable = NULL;
 
     if (C > 0)
@@ -194,12 +200,31 @@ void displayHashtable(EMBEDDING* model)
     {
         if(model->hashtable[i] != NULL)
         {
-            printf("%s", model->hashtable[i]->word);
+            printf("%s\n", model->hashtable[i]->word);
             for(int j=0; j<model->vocab_size; ++j)
                 printf("%.1f ", model->hashtable[i]->onehotvector[0][j]);
-            printf("\n");
+            printf("\n\n");
         }
     }
+}
+
+void displayModel(EMBEDDING* model)
+{
+    printf("Input: %s\n\n", model->corpus);
+    printf("Cleaned Text : %s\n\n", model->clean_corpus);
+    printf("Vocabulary: %s\n\n", model->vocab);
+    printf("C: %d\nN: %d\nalpha: %f\nVocab Size: %d\n\n", model->context, model->dimension, model->alpha, model->vocab_size);
+    printf("Hashtable: \n");
+    displayHashtable(model);
+    printf("\nW1: \n");
+    displayArray(model->W1, model->dimension, model->vocab_size);
+    printf("\nW2: \n");
+    displayArray(model->W2, model->vocab_size, model->dimension);
+    printf("\nb1: \n");
+    displayArray(model->b1, model->dimension, 1);
+    printf("\nb2: \n");
+    displayArray(model->b2, model->vocab_size, 1);
+
 }
 
 char* remove_punctuations(char *sent)
@@ -244,8 +269,9 @@ char* trim(char* word)
     return s;
 }
 
-int getVocabularySize(EMBEDDING* model, char* corpus)
+int getVocabularySize(EMBEDDING* model)
 {
+    char* corpus = model->clean_corpus;
     int len = strlen(corpus);
     char* temp1 = (char*)malloc(sizeof(char)*len);
     char* temp2 = (char*)malloc(sizeof(char)*len);
@@ -307,8 +333,7 @@ float** createOneHot(NODE* node, EMBEDDING* model)
 
 void createHashtable(EMBEDDING* model, char* corpus)
 {
-    char* cleaned_corpus = remove_punctuations(corpus);
-    model->vocab_size = getVocabularySize(model, cleaned_corpus);
+    model->vocab_size = getVocabularySize(model);
     initialiseModelHashtable(model);
     //printf("Vocabulary: %s\nSize: %d\n", model->vocab, model->vocab_size);
     char word[30];
@@ -328,13 +353,21 @@ void createHashtable(EMBEDDING* model, char* corpus)
     }
 }
 
+void createXandY(EMBEDDING* model)
+{
+    int num_words = 0;
+    char* token , *save;
+    
+}
+
 void train(char* corpus, int C, int N, float alpha, int random_state)
 {
-    EMBEDDING* model = initialiseModelParameters(C, N, alpha);
+    EMBEDDING* model = initialiseModelParameters(corpus, C, N, alpha);
     createHashtable(model, corpus);
-    //displayHashtable(model);
     model->W1 = createArray(model->dimension, model->vocab_size, random_state);
     model->W2 = createArray(model->vocab_size, model->dimension, random_state);
     model->b1 = createArray(model->dimension, 1, random_state);
     model->b2 = createArray(model->vocab_size, 1, random_state);
+    displayModel(model);
+    //createXandY(model)
 }
