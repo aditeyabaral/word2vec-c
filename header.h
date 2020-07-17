@@ -41,4 +41,4 @@ int getVocabularySize(EMBEDDING*, char*);
 char* trim(char*);
 float** createOneHot(NODE* node, EMBEDDING* model);
 void createHashtable(EMBEDDING*, char*);
-void train(int C, int N, float alpha, char* corpus);
+void train(char* corpus, int C, int N, float alpha, int random_state);

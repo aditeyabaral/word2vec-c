@@ -328,21 +328,13 @@ void createHashtable(EMBEDDING* model, char* corpus)
     }
 }
 
-void train(int C, int N, float alpha, char* corpus)
+void train(char* corpus, int C, int N, float alpha, int random_state)
 {
     EMBEDDING* model = initialiseModelParameters(C, N, alpha);
     createHashtable(model, corpus);
     //displayHashtable(model);
-    /*
-    Aronya - 
-    Get one hot vectors for words in vocabulary. model stores size of vocabulary and vocabulary in vocab_size
-    and vocab. Create vectors in the same order as vocab. Assign one hot vector of word to onehotvector attribute
-    of NODE struct. DONE
-    
-    Use createArray() template to make creatZeros(m, n) and createOnes(m,n) where m,n is size. Call createZeros() to make
-    one hot vector, and set the corresponding row number of word to 1. DONE
-    
-    Create softmax function that handles a matrix input and returns the same. Do not edit in place, dynamically 
-    allocate memory. Use createOnes() to create empty matrix and use it to and return it. DONE
-    */
+    model->W1 = createArray(model->dimension, model->vocab_size, random_state);
+    model->W2 = createArray(model->vocab_size, model->dimension, random_state);
+    model->b1 = createArray(model->dimension, 1, random_state);
+    model->b2 = createArray(model->vocab_size, 1, random_state);
 }
