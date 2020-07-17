@@ -7,6 +7,70 @@ float relu(float x)
     return 0.0;
 }
 
+float** softmax(float** M, int m, int n, int axis)
+{
+    /* Allocating space for output 2D matrix*/
+    float** softmax_out = createZerosArray(m, n);
+
+    /* Setting all values in output to be exp(corresponding value in input M) */
+    for(int i=0; i<m; ++i)
+    {
+        for(int j=0; j<n; ++j)
+        {
+            softmax_out[i][j] = exp(M[i][j]);   
+        }
+    }
+
+    /* Calculating column and row sums of output matrix */
+    double* colsums = (double*)malloc(n*sizeof(double));
+    double* rowsums = (double*)malloc(m*sizeof(double));
+    memset(rowsums, 0, m*sizeof(double));
+    memset(colsums, 0, n*sizeof(double));
+    double sum = 0.0;
+    for(int i=0; i<m; ++i)
+    {
+        for(int j=0; j<n; ++j)
+        {
+            rowsums[i] += softmax_out[i][j];
+            colsums[j] += softmax_out[i][j];
+            sum += softmax_out[i][j];
+        }
+    }
+    if(axis==1)  /*Divide each element by its column sum*/
+    {
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                softmax_out[i][j] /= colsums[j];
+            }
+        }
+    }
+    else if(axis==0) /*Divide each element by its row sum*/
+    {
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                softmax_out[i][j] /= rowsums[i];
+            }
+        }
+    }
+    else /* Divide each element by matrix sum */
+    {
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                softmax_out[i][j] /= sum;
+            }
+        }
+    }
+    free(colsums);
+    free(rowsums);
+    return softmax_out;
+}
+
 int getHashvalue(char *word, int vocab_size)
 {
     int val = 0;
@@ -117,7 +181,12 @@ void displayHashtable(EMBEDDING* model)
     for(int i=0;i<model->vocab_size;i++)
     {
         if(model->hashtable[i] != NULL)
-            printf("%s\n", model->hashtable[i]->word);
+        {
+            printf("%s", model->hashtable[i]->word);
+            for(int j=0; j<model->vocab_size; ++j)
+                printf("%.1f ", model->hashtable[i]->onehotvector[0][j]);
+            printf("\n");
+        }
     }
 }
 
@@ -199,8 +268,29 @@ int getVocabularySize(EMBEDDING* model, char* corpus)
         }
         token1 = strtok_r(NULL, " ", &save1);
     }
+    free(temp1);
+    free(temp3);
     model->vocab = temp2;
     return V;
+}
+
+float** createOneHot(NODE* node, EMBEDDING* model)
+{
+    int index = getHashvalue(node->word, model->vocab_size);
+    while(model->hashtable[index] != NULL)
+    {
+        if(!strcmp(model->hashtable[index]->word, node->word))
+            break;
+        index = (index+1)%model->vocab_size;
+    }
+    float** oneHotVector = createZerosArray(1, model->vocab_size);
+    if(oneHotVector == NULL)
+    {
+        printf("Failed to allocate memory for one hot vector!\n");
+        return NULL;
+    }
+    oneHotVector[0][index] = 1;
+    return oneHotVector;
 }
 
 void createHashtable(EMBEDDING* model, char* corpus)
@@ -220,6 +310,7 @@ void createHashtable(EMBEDDING* model, char* corpus)
         NODE* node = (NODE*)malloc(sizeof(NODE));
         node->word = (char*)malloc(sizeof(char)*strlen(word));
         strcpy(node->word, word);
+        node->onehotvector = createOneHot(node, model);
         insert(node, model);
         token = strtok_r(NULL, " ", &save);
     }
@@ -234,16 +325,17 @@ void train(EMBEDDING* model, int C, int N, float alpha, char* corpus)
     if (alpha > 0)
         model->alpha = alpha;
     createHashtable(model, corpus);
-
-    //displayHashtable(model);
+    displayHashtable(model);
     /*
     Aronya - 
     Get one hot vectors for words in vocabulary. model stores size of vocabulary and vocabulary in vocab_size
     and vocab. Create vectors in the same order as vocab. Assign one hot vector of word to onehotvector attribute
-    of NODE struct.
+    of NODE struct. DONE
+    
     Use createArray() template to make creatZeros(m, n) and createOnes(m,n) where m,n is size. Call createZeros() to make
-    one hot vector, and set the corresponding row number of word to 1. 
+    one hot vector, and set the corresponding row number of word to 1. DONE
+    
     Create softmax function that handles a matrix input and returns the same. Do not edit in place, dynamically 
-    allocate memory. Use createOnes() to create empty matrix and use it to and return it.
+    allocate memory. Use createOnes() to create empty matrix and use it to and return it. DONE
     */
 }
