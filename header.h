@@ -7,7 +7,8 @@
 struct node
 {
     char *word;
-    float *vector;
+    float *wordvector;
+    float* onehotvector;
 };
 typedef struct node NODE;
 

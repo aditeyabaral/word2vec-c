@@ -169,7 +169,7 @@ void createHashtable(EMBEDDING* model, char* corpus)
     char* cleaned_corpus = remove_punctuations(corpus);
     model->vocab_size = getVocabularySize(model, cleaned_corpus);
     initialiseModelHashtable(model);
-    printf("Vocabulary: %s\nSize: %d\n", model->vocab, model->vocab_size);
+    //printf("Vocabulary: %s\nSize: %d\n", model->vocab, model->vocab_size);
     char word[30];
     char *save, *token;
     char *temp = (char*)malloc(sizeof(char)*strlen(model->vocab));
@@ -195,8 +195,15 @@ void train(EMBEDDING* model, int C, int N, float alpha, char* corpus)
     if (alpha > 0)
         model->alpha = alpha;
     createHashtable(model, corpus);
-    displayHashtable(model);
+    //displayHashtable(model);
     /*
-    Get one hot vectors from OHV(), along with vocab_size.
+    Aronya - 
+    Get one hot vectors for words in vocabulary. model stores size of vocabulary and vocabulary in vocab_size
+    and vocab. Create vectors in the same order as vocab. Assign one hot vector of word to onehotvector attribute
+    of NODE struct.
+    Use createArray() template to make creatZeros(m, n) and createOnes(m,n) where m,n is size. Call createZeros() to make
+    one hot vector, and set the corresponding row number of word to 1. 
+    Create softmax function that handles a matrix input and returns the same. Do not edit in place, dynamically 
+    allocate memory. Use createOnes() to create empty matrix and use it to and return it.
     */
 }
