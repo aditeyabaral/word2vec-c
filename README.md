@@ -5,7 +5,7 @@
  To run <br>
  
  ```
- gcc w2v.c dep.c
+ gcc w2v.c dep.c -lm
  ./a.out < test.txt
  ```
  
