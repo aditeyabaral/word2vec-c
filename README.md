@@ -6,6 +6,6 @@
  
  ```
  gcc w2v.c dep.c -lm
- ./a.out < test.txt
+ ./a.out < test.txt >modelDetails.txt
  ```
  
