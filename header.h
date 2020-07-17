@@ -3,11 +3,11 @@
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
+#include <limits.h>
 struct node
 {
     char *word;
     float *vector;
-    bool mark;
 };
 typedef struct node NODE;
 
@@ -21,16 +21,19 @@ struct embedding
     float **W2;
     float **b1;
     float **b2;
+    char* vocab;
     NODE **hashtable;
 };
 typedef struct embedding EMBEDDING;
 
 float relu(float);
-void init(EMBEDDING*);
+void initialiseModelParameters(EMBEDDING*);
+void initialiseModelHashtable(EMBEDDING*);
 float** createArray(int, int, int);
-void display(float**, int, int);
+void displayArray(float**, int, int);
+void displayHashtable(EMBEDDING*);
 char* remove_punctuations(char*);
-int getVocabularySize(char*);
+int getVocabularySize(EMBEDDING*, char*);
 char* trim(char*);
-void OneHotEncoding(EMBEDDING*, char*);
-void train(EMBEDDING*, int, int, float, char*);
+void createHashtable(EMBEDDING*, char*);
+void train(EMBEDDING* model, int C, int N, float alpha, char* corpus);
