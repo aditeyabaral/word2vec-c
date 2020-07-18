@@ -121,6 +121,6 @@ EMBEDDING* train(char* corpus, int C, int N, double alpha, int epochs, int rando
     createXandY(model, random_state);
     printf("Initiating Training...\n");
     gradientDescent(model);
-    //displayModel(model);
+    displayModel(model);
     return model;
 }
