@@ -45,6 +45,7 @@ void displayHashtable(EMBEDDING*);
 void displayModel(EMBEDDING* model);
 char* remove_punctuations(char*);
 int getVocabularySize(EMBEDDING*);
+int getHashvalue(char*, int);
 char* trim(char*);
 float** createOneHot(NODE* node, EMBEDDING* model);
 void createHashtable(EMBEDDING*, char*);
