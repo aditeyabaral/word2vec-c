@@ -88,7 +88,7 @@ double** createArray(int m, int n, int random_state)
     {
         array[i] = (double*)malloc(sizeof(double)*n);
         for(int j = 0; j<n; j++)
-            array[i][j] = ((double)rand()/(double)(RAND_MAX))/1;
+            array[i][j] = ((double)rand()/(double)(RAND_MAX))/10;
     }
     return array;
 }
