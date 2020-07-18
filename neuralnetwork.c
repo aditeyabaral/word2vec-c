@@ -43,7 +43,7 @@ void forward_propagation(EMBEDDING* model)
     model->Z2 = broadcast_and_add(W2A1, model->b2, model->vocab_size, model->batch_size, model->vocab_size, 1);
     
     model->yhat = softmax(model->Z2, model->vocab_size, model->batch_size, 1);
-    //displayArray(model->yhat, model->vocab_size, model->batch_size);
+    displayArray(model->yhat, model->vocab_size, model->batch_size);
 }
 
 void back_propagation(EMBEDDING* model)
@@ -88,7 +88,6 @@ void gradientDescent(EMBEDDING* model)
     for(int i=0; i< model->epochs; i++)
     {
         forward_propagation(model);
-        //break;
         loss = cost(model);
         printf("Epoch: %d Loss: %lf\n", i, loss);
         back_propagation(model);

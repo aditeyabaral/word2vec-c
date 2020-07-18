@@ -8,7 +8,7 @@ double** relu(double** X, int m, int n)
         for(int j=0; j<n; j++)
         {
             if (X[i][j]<=0.0)
-                result[i][j] = 0;
+                result[i][j] = 0.0;
             else
                 result[i][j] = X[i][j];
         }
@@ -45,7 +45,7 @@ double** softmax(double** M, int m, int n, int axis)
             sum += softmax_out[i][j];
         }
     }
-    if(axis==1)  /*Divide each element by its column sum*/
+    if(axis==0)  /*Divide each element by its column sum*/
     {
         for(int i=0; i<m; ++i)
         {
@@ -55,7 +55,7 @@ double** softmax(double** M, int m, int n, int axis)
             }
         }
     }
-    else if(axis==0) /*Divide each element by its row sum*/
+    else if(axis==1) /*Divide each element by its row sum*/
     {
         for(int i=0; i<m; ++i)
         {
@@ -203,7 +203,7 @@ double** getX(EMBEDDING* model, int m, char* s)
         double** example = createZerosArray(1, model->vocab_size);
         int ctr = 0;
         token2 = strtok_r(token1, " ", &save2);
-        while(token2 != NULL && ctr <= model->context)
+        while(token2 != NULL && ctr <= 2*model->context)
         {
             int index = getHashvalue(token2, model->vocab_size);
             while(model->hashtable[index] != NULL)

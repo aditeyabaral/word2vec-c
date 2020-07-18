@@ -98,7 +98,6 @@ void createXandY(EMBEDDING* model, int random_state)
         X_words[strlen(X_words)-1] = '\n';
         ctr1++;
         token1 = strtok_r(NULL, " ", &save1);
-        //printf("check1: %s\n", token1);
     }
 
     int m = ctr1-1;
@@ -121,9 +120,8 @@ EMBEDDING* train(char* corpus, int C, int N, double alpha, int epochs, int rando
     model->b2 = createArray(model->vocab_size, 1, random_state);
     printf("Creating X and y...\n");
     createXandY(model, random_state);
-    //displayModel(model);
+    displayModel(model);
     printf("Initiating Training...\n");
     gradientDescent(model);
-    //displayModel(model);
     return model;
 }
