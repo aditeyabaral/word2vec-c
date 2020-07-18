@@ -1,16 +1,25 @@
 #include "header.h"
 
-float relu(float x)
+double** relu(double** X, int m, int n)
 {
-    if (x>=0.0)
-        return x;
-    return 0.0;
+    double** result = createZerosArray(m, n);
+    for(int i = 0; i<m; i++)
+    {
+        for(int j=0; j<n; j++)
+        {
+            if (X[i][j]<=0.0)
+                result[i][j] = 0;
+            else
+                result[i][j] = X[i][j];
+        }
+    }
+    return result;
 }
 
-float** softmax(float** M, int m, int n, int axis)
+double** softmax(double** M, int m, int n, int axis)
 {
     /* Allocating space for output 2D matrix*/
-    float** softmax_out = createZerosArray(m, n);
+    double** softmax_out = createZerosArray(m, n);
 
     /* Setting all values in output to be exp(corresponding value in input M) */
     for(int i=0; i<m; ++i)
@@ -71,47 +80,46 @@ float** softmax(float** M, int m, int n, int axis)
     return softmax_out;
 }
 
-float** createArray(int m, int n, int random_state)
+double** createArray(int m, int n, int random_state)
 {
     srand(random_state);
-    float** array = (float**)malloc(sizeof(float*)*m);
+    double** array = (double**)malloc(sizeof(double*)*m);
     for(int i = 0; i<m ;i++)
     {
-        array[i] = (float*)malloc(sizeof(float)*n);
+        array[i] = (double*)malloc(sizeof(double)*n);
         for(int j = 0; j<n; j++)
-            array[i][j] = (float)rand()/(float)(RAND_MAX);
+            array[i][j] = ((double)rand()/(double)(RAND_MAX))/10;
     }
     return array;
 }
 
-float** createZerosArray(int m, int n)
+double** createZerosArray(int m, int n)
 {
-    float** array = (float**)malloc(sizeof(float*)*m);
+    double** array = (double**)malloc(sizeof(double*)*m);
     for(int i = 0; i<m ;i++)
     {
-        array[i] = (float*)malloc(sizeof(float)*n);
+        array[i] = (double*)malloc(sizeof(double)*n);
         for(int j = 0; j<n; j++)
             array[i][j] = 0;
     }
     return array;
 }
 
-float** createOnesArray(int m, int n)
+double** createOnesArray(int m, int n)
 {
-    float** array = (float**)malloc(sizeof(float*)*m);
+    double** array = (double**)malloc(sizeof(double*)*m);
     for(int i = 0; i<m ;i++)
     {
-        array[i] = (float*)malloc(sizeof(float)*n);
+        array[i] = (double*)malloc(sizeof(double)*n);
         for(int j = 0; j<n; j++)
             array[i][j] = 1;
     }
     return array;
 }
 
-float** multiply(float **M1, float **M2, int m1, int n1, int m2, int n2)
+double** multiply(double **M1, double **M2, int m1, int n1, int m2, int n2)
 {
-    float **result = createZerosArray(m1, n2);
-    displayArray(result, m1, n2);
+    double **result = createZerosArray(m1, n2);
     for(int i = 0; i<m1 ;i++)
     {
         for(int j=0; j<n2 ;j++)
@@ -123,16 +131,49 @@ float** multiply(float **M1, float **M2, int m1, int n1, int m2, int n2)
     return result;
 }
 
-float **transpose(float**A, int m, int n)
+double** add(double **M1, double **M2, int m, int n)
 {
-    float **trans = createZerosArray(n, m);
+    double **result = createZerosArray(m, n);
+    for(int i = 0; i<m; i++)
+    {
+        for(int j=0; j<n ;j++)
+            result[i][j] = M1[i][j] + M2[i][j];
+    }
+    return result;
+}
+
+double** subtract(double **M1, double **M2, int m, int n)
+{
+    double **result = createZerosArray(m, n);
+    for(int i = 0; i<m; i++)
+    {
+        for(int j=0; j<n ;j++)
+            result[i][j] = M1[i][j] - M2[i][j];
+    }
+    return result;
+}
+
+double** multiply_scalar(double **M, double C, int m, int n)
+{
+    double **result = createZerosArray(m, n);
+    for(int i = 0; i<m; i++)
+    {
+        for(int j=0; j<n ;j++)
+            result[i][j] = M[i][j]*C;
+    }
+    return result;
+}
+
+double **transpose(double**A, int m, int n)
+{
+    double **trans = createZerosArray(n, m);
     for (int i = 0; i < n; i++) 
         for (int j = 0; j < m; j++) 
             trans[i][j] = A[j][i];
     return trans;
 }
 
-float** createOneHot(NODE* node, EMBEDDING* model)
+double** createOneHot(NODE* node, EMBEDDING* model)
 {
     int index = getHashvalue(node->word, model->vocab_size);
     while(model->hashtable[index] != NULL)
@@ -141,7 +182,7 @@ float** createOneHot(NODE* node, EMBEDDING* model)
             break;
         index = (index+1)%model->vocab_size;
     }
-    float** oneHotVector = createZerosArray(1, model->vocab_size);
+    double** oneHotVector = createZerosArray(1, model->vocab_size);
     if(oneHotVector == NULL)
     {
         printf("Failed to allocate memory for one hot vector!\n");
@@ -151,15 +192,15 @@ float** createOneHot(NODE* node, EMBEDDING* model)
     return oneHotVector;
 }
 
-float** getX(EMBEDDING* model, int m, char* s)
+double** getX(EMBEDDING* model, int m, char* s)
 {
-    float** X = createZerosArray(model->vocab_size, m);
+    double** X = createZerosArray(model->vocab_size, m);
     char *token1, *save1, *token2, *save2;
     token1 = strtok_r(s, "\n", &save1);
     int col = 0;
     while(token1 != NULL && col <= m)
     {
-        float** example = createZerosArray(1, model->vocab_size);
+        double** example = createZerosArray(1, model->vocab_size);
         int ctr = 0;
         token2 = strtok_r(token1, " ", &save2);
         while(token2 != NULL && ctr <= model->context)
@@ -171,7 +212,7 @@ float** getX(EMBEDDING* model, int m, char* s)
                     break;
                 index = (index+1)%model->vocab_size;
             }
-            float** oneHotVector = model->hashtable[index]->onehotvector;
+            double** oneHotVector = model->hashtable[index]->onehotvector;
             for(int j=0; j<model->vocab_size; j++)
                 example[0][j]+= oneHotVector[0][j];
             token2 = strtok_r(NULL, " ", &save2);
@@ -187,9 +228,9 @@ float** getX(EMBEDDING* model, int m, char* s)
     return X;
 }
 
-float** getY(EMBEDDING* model, int m, char* s)
+double** getY(EMBEDDING* model, int m, char* s)
 {
-    float** y = createZerosArray(model->vocab_size, m);
+    double** y = createZerosArray(model->vocab_size, m);
     char *token, *save; 
     token = strtok_r(s, "\n", &save);
     int col = 0;
@@ -202,7 +243,7 @@ float** getY(EMBEDDING* model, int m, char* s)
                 break;
             index = (index+1)%model->vocab_size;
         }
-        float** oneHotVector = model->hashtable[index]->onehotvector;
+        double** oneHotVector = model->hashtable[index]->onehotvector;
         for(int j = 0; j<model->vocab_size; j++)
         {
             y[j][col] = oneHotVector[0][j];

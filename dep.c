@@ -1,6 +1,6 @@
 #include "header.h"
 
-EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, float alpha)
+EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, double alpha, int epochs)
 {
     EMBEDDING* model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
     int len = strlen(corpus);
@@ -26,6 +26,12 @@ EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, float alpha)
         model->alpha = alpha;
     else
         model->alpha = 0.01;
+
+    if (epochs <= 0)
+        model->epochs = 100;
+    else
+        model->epochs = epochs;
+
     return model;
 }
 
@@ -64,6 +70,7 @@ void createXandY(EMBEDDING* model, int random_state)
 
     while(token1 != NULL && ctr1 <= (num_words-2*model->context))
     {
+        printf("%d/%d\n", ctr1, num_words-2*model->context);
         ctr2 = 1;
         strcpy(temp2, model->clean_corpus);
         token2 = strtok_r(temp2, " ", &save2);
@@ -87,27 +94,36 @@ void createXandY(EMBEDDING* model, int random_state)
             strcat(X_words, " ");
             token2 = strtok_r(NULL, " ", &save2);
         }
+        
         X_words[strlen(X_words)-1] = '\n';
         ctr1++;
         token1 = strtok_r(NULL, " ", &save1);
+        //printf("check1: %s\n", token1);
     }
 
     int m = ctr1-1;
     model->batch_size = m;
-    //printf("%s\n\n", X_words);
-    //printf("%s\n\n", y_words);
-    model->X = getX(model, m, X_words);;
+    printf("Obtaining X matrix...\n");
+    model->X = getX(model, m, X_words);
+    printf("Obtaining y matrix...\n");
     model->Y = getY(model, m, y_words);
 }
 
-void train(char* corpus, int C, int N, float alpha, int random_state)
+EMBEDDING* train(char* corpus, int C, int N, double alpha, int epochs, int random_state)
 {
-    EMBEDDING* model = initialiseModelParameters(corpus, C, N, alpha);
+    EMBEDDING* model = initialiseModelParameters(corpus, C, N, alpha, epochs);
+    printf("Initialising hyperparameters...\n");
     createHashtable(model, corpus);
+    printf("Creating Vocabulary...\n");
     model->W1 = createArray(model->dimension, model->vocab_size, random_state);
     model->W2 = createArray(model->vocab_size, model->dimension, random_state);
     model->b1 = createArray(model->dimension, 1, random_state);
     model->b2 = createArray(model->vocab_size, 1, random_state);
+    printf("Creating X and y...\n");
     createXandY(model, random_state);
-    displayModel(model);
+    //displayModel(model);
+    printf("Initiating Training...\n");
+    gradientDescent(model);
+    //displayModel(model);
+    return model;
 }

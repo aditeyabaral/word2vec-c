@@ -2,13 +2,13 @@
 
 char* remove_punctuations(char *sent)
 {
-	char punc[] = {'!', ']', '{', '#', '.', '<', '/', '(', '~', ',', '%', ';', '`', ':', '?', '+', '$', '^', '\\', '@', '*', '}', '=', '_', '\"', ')', '-', '|', '[', '&', '>'};
+	char punc[] = {'\n', '!', ']', '{', '#', '.', '<', '/', '(', '~', ',', '%', ';', '`', ':', '?', '+', '$', '^', '\\', '@', '*', '}', '=', '_', '\"', ')', '-', '|', '[', '&', '>'};
 	int check, ctr = 0;
 	char *s = (char*)malloc(sizeof(char)*strlen(sent));
 	for (int i = 0; i< strlen(sent); i++)
 	{
 		check = 0;
-		for (int j = 0; j< 30; j++)
+		for (int j = 0; j< 31; j++)
 		{
 			if ((char)sent[i] == (char)punc[j])
 			{

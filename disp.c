@@ -1,11 +1,11 @@
 #include "header.h"
 
-void displayArray(float **a, int m, int n)
+void displayArray(double **a, int m, int n)
 {
     for(int i = 0; i<m ;i++)
     {
         for(int j = 0; j<n; j++)
-            printf("%f ", a[i][j]);
+            printf("%lf ", a[i][j]);
         printf("\n");
     }
     printf("\n");
@@ -19,7 +19,7 @@ void displayHashtable(EMBEDDING* model)
         {
             printf("%s\n", model->hashtable[i]->word);
             for(int j=0; j<model->vocab_size; ++j)
-                printf("%.1f ", model->hashtable[i]->onehotvector[0][j]);
+                printf("%.1lf ", model->hashtable[i]->onehotvector[0][j]);
             printf("\n\n");
         }
     }
@@ -30,7 +30,7 @@ void displayModel(EMBEDDING* model)
     printf("Input: %s\n\n", model->corpus);
     printf("Cleaned Text : %s\n\n", model->clean_corpus);
     printf("Vocabulary: %s\n\n", model->vocab);
-    printf("C: %d\nN: %d\nalpha: %f\nVocab Size: %d\nBatch Size: %d\n\n", model->context, model->dimension, model->alpha, model->vocab_size, model->batch_size);
+    printf("C: %d\nN: %d\nalpha: %lf\nVocab Size: %d\nBatch Size: %d\n\n", model->context, model->dimension, model->alpha, model->vocab_size, model->batch_size);
     printf("Hashtable: \n");
     displayHashtable(model);
     printf("\nX: \n\n");
