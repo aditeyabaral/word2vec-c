@@ -123,6 +123,15 @@ float** multiply(float **M1, float **M2, int m1, int n1, int m2, int n2)
     return result;
 }
 
+float **transpose(float**A, int m, int n)
+{
+    float **trans = createZerosArray(n, m);
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < m; j++) 
+            trans[i][j] = A[j][i];
+    return trans;
+}
+
 float** createOneHot(NODE* node, EMBEDDING* model)
 {
     int index = getHashvalue(node->word, model->vocab_size);

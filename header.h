@@ -40,6 +40,8 @@ void initialiseModelHashtable(EMBEDDING*);
 float** createArray(int, int, int);
 float** createZerosArray(int m, int n);
 float** createOnesArray(int m, int n);
+float** transpose(float**A, int m, int n);
+float** multiply(float **M1, float **M2, int m1, int n1, int m2, int n2);
 void displayArray(float**, int, int);
 void displayHashtable(EMBEDDING*);
 void displayModel(EMBEDDING* model);
