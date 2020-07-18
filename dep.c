@@ -70,7 +70,6 @@ void createXandY(EMBEDDING* model, int random_state)
 
     while(token1 != NULL && ctr1 <= (num_words-2*model->context))
     {
-        printf("%d/%d\n", ctr1, num_words-2*model->context);
         ctr2 = 1;
         strcpy(temp2, model->clean_corpus);
         token2 = strtok_r(temp2, " ", &save2);
@@ -120,8 +119,8 @@ EMBEDDING* train(char* corpus, int C, int N, double alpha, int epochs, int rando
     model->b2 = createArray(model->vocab_size, 1, random_state);
     printf("Creating X and y...\n");
     createXandY(model, random_state);
-    displayModel(model);
     printf("Initiating Training...\n");
     gradientDescent(model);
+    //displayModel(model);
     return model;
 }

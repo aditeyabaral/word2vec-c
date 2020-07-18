@@ -33,17 +33,21 @@ double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int 
 void forward_propagation(EMBEDDING* model)
 {
     double **W1X = multiply(model->W1, model->X, model->dimension, model->vocab_size, model->vocab_size, model->batch_size);
-    
+    //printf("W1X:\n");
+    //displayArray(W1X, model->dimension, model->batch_size);
     model->Z1 = broadcast_and_add(W1X, model->b1, model->dimension, model->batch_size, model->dimension, 1);
-    
+    //printf("Z1:\n");
+    //displayArray(model->Z1, model->dimension, model->batch_size);
     model->A1 = relu(model->Z1, model->dimension, model->batch_size);
-    
+    //printf("A1:\n");
+    //displayArray(model->A1, model->dimension, model->batch_size);
     double **W2A1 = multiply(model->W2, model->A1, model->vocab_size, model->dimension, model->dimension, model->batch_size);
-    
     model->Z2 = broadcast_and_add(W2A1, model->b2, model->vocab_size, model->batch_size, model->vocab_size, 1);
-    
+    //printf("Z2:\n");
+    //displayArray(model->Z2, model->vocab_size, model->batch_size);
     model->yhat = softmax(model->Z2, model->vocab_size, model->batch_size, 1);
-    displayArray(model->yhat, model->vocab_size, model->batch_size);
+    //printf("A2: \n");
+    //displayArray(model->yhat, model->vocab_size, model->batch_size);
 }
 
 void back_propagation(EMBEDDING* model)
