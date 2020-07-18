@@ -19,6 +19,7 @@ struct embedding
     int dimension;
     int vocab_size;
     int corpus_length;
+    int batch_size;
     float **W1;
     float **W2;
     float **b1;
@@ -47,5 +48,7 @@ int getVocabularySize(EMBEDDING*);
 char* trim(char*);
 float** createOneHot(NODE* node, EMBEDDING* model);
 void createHashtable(EMBEDDING*, char*);
-void createXandY(EMBEDDING* model);
+void createXandY(EMBEDDING* model, int random_state);
+float** getX(EMBEDDING* model, int m, char* s);
+float** getY(EMBEDDING* model, int m, char* s);
 void train(char* corpus, int C, int N, float alpha, int random_state);
