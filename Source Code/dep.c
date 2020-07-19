@@ -164,8 +164,17 @@ void writeParameters(EMBEDDING* model)
     fprintf(fp, "N,%d,\n", model->dimension);
     fprintf(fp, "Vocabulary Size,%d,\n", model->vocab_size);
     fprintf(fp, "Batch Size,%d,\n", model->batch_size);
+    fprintf(fp, "Corpus Length,%d,\n", model->corpus_length);
     fprintf(fp, "Epochs,%d,\n", model->epochs);
+    fclose(fp);
+}
 
+void writeCorpus(EMBEDDING* model)
+{
+    FILE* fp  = fopen("model-corpus.txt", "w");
+    fprintf(fp, "Cleaned Corpus,%s,\n\n", model->clean_corpus);
+    fprintf(fp, "Vocabulary,%s,\n\n", model->vocab);
+    fprintf(fp, "Corpus,%s,\n\n", model->corpus);
     fclose(fp);
 }
 
@@ -173,8 +182,9 @@ void saveModel(EMBEDDING* model, bool write_all)
 {
     writeEmbeddings(model);
     writeParameters(model);
-
+    writeCorpus(model);
     if (write_all)
+        writeCorpus(model);
 }
 
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose)
