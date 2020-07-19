@@ -71,3 +71,6 @@ void back_propagation(EMBEDDING* model);
 void forward_propagation(EMBEDDING* model);
 double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int n2);
 float cost(EMBEDDING* model);
+void saveModel(EMBEDDING* model, bool write_all);
+void writeEmbeddings(EMBEDDING* model);
+void writeParameters(EMBEDDING* model);

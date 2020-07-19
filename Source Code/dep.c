@@ -143,6 +143,40 @@ void extractEmbeddings(EMBEDDING* model)
     }
 }
 
+void writeEmbeddings(EMBEDDING* model)
+{
+    FILE* fp  = fopen("model-embeddings.csv", "w");
+    for(int i = 0; i < model->vocab_size; i++)
+    {
+        fprintf(fp, "%s,", model->hashtable[i]->word);
+        for(int j = 0; j < model->dimension; j++)
+            fprintf(fp, "%lf,", model->hashtable[i]->wordvector[0][j]);
+        fprintf(fp, "%c", '\n');
+    }
+    fclose(fp);
+}
+
+void writeParameters(EMBEDDING* model)
+{
+    FILE* fp  = fopen("model-parameters.csv", "w");
+    fprintf(fp, "alpha,%f,\n", model->alpha);
+    fprintf(fp, "C,%d,\n", model->context);
+    fprintf(fp, "N,%d,\n", model->dimension);
+    fprintf(fp, "Vocabulary Size,%d,\n", model->vocab_size);
+    fprintf(fp, "Batch Size,%d,\n", model->batch_size);
+    fprintf(fp, "Epochs,%d,\n", model->epochs);
+
+    fclose(fp);
+}
+
+void saveModel(EMBEDDING* model, bool write_all)
+{
+    writeEmbeddings(model);
+    writeParameters(model);
+
+    if (write_all)
+}
+
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose)
 {
     printf("Initialising hyperparameters...\n");
