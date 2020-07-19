@@ -42,6 +42,5 @@ $ ./a.out < textfilename
 
 ## To-Do
 
-* saving weights and biases
 * loading model from file
 * w2v functions like similarity, most_similar etc
