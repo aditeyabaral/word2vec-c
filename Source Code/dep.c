@@ -1,8 +1,22 @@
 #include "header.h"
 
-EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, double alpha, int epochs)
+void initialiseModelParameters(EMBEDDING* model, int C, int N, double alpha, int epochs)
 {
-    EMBEDDING* model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
+    if (C > 0)
+        model->context = C;
+
+    if (N > 0)
+        model->dimension = N;
+
+    if (alpha > 0)
+        model->alpha = alpha;
+
+    if (epochs > 0)
+        model->epochs = epochs;
+}
+
+void initialiseModelCorpus(EMBEDDING* model, char* corpus)
+{
     int len = strlen(corpus);
     model->corpus_length = len;
     model->corpus = (char*)malloc(sizeof(char)*len);
@@ -10,29 +24,6 @@ EMBEDDING* initialiseModelParameters(char* corpus, int C, int N, double alpha, i
     char* cleaned_corpus = trim(remove_punctuations(corpus));
     strcpy(model->clean_corpus, cleaned_corpus);
     strcpy(model->corpus, corpus);
-    model->hashtable = NULL;
-
-    if (C > 0)
-        model->context = C;
-    else
-        model->context = 2;
-
-    if (N > 0)
-        model->dimension = N;
-    else
-        model->dimension = 100;
-
-    if (alpha > 0)
-        model->alpha = alpha;
-    else
-        model->alpha = 0.01;
-
-    if (epochs <= 0)
-        model->epochs = 100;
-    else
-        model->epochs = epochs;
-
-    return model;
 }
 
 void initialiseModelHashtable(EMBEDDING* model)
@@ -107,20 +98,58 @@ void createXandY(EMBEDDING* model, int random_state)
     model->Y = getY(model, m, y_words);
 }
 
-EMBEDDING* train(char* corpus, int C, int N, double alpha, int epochs, int random_state)
+EMBEDDING* createModel()
 {
-    EMBEDDING* model = initialiseModelParameters(corpus, C, N, alpha, epochs);
+    EMBEDDING* model = (EMBEDDING*)malloc(sizeof(EMBEDDING));
+
+    model->context = 2;
+    model->dimension = 100;
+    model->alpha = 0.01;
+    model->epochs = 100;
+    model->batch_size = 0;
+    model->corpus_length = 0;
+    model->vocab_size = 0;
+    model->A1 = NULL;
+    model->b1 = NULL;
+    model->b2 = NULL;
+    model->clean_corpus = NULL;
+    model->corpus = NULL;
+    model->hashtable = NULL;
+    model->vocab = NULL;
+    model->W1 = NULL;
+    model->W2 = NULL;
+    model->X = NULL;
+    model->Y = NULL;
+    model->yhat = NULL;
+    model->Z1 = NULL;
+    model->Z2 = NULL;
+
+    return model;
+}
+
+void train(EMBEDDING* model, char* corpus, int C, int N, double alpha, int epochs, int random_state, bool verbose)
+{
     printf("Initialising hyperparameters...\n");
-    createHashtable(model, corpus);
-    printf("Creating Vocabulary...\n");
-    model->W1 = createArray(model->dimension, model->vocab_size, random_state);
-    model->W2 = createArray(model->vocab_size, model->dimension, random_state);
-    model->b1 = createArray(model->dimension, 1, random_state);
-    model->b2 = createArray(model->vocab_size, 1, random_state);
-    printf("Calculating X and y...\n");
-    createXandY(model, random_state);
+    initialiseModelParameters(model, C, N, alpha, epochs);
+    
+    if(corpus != NULL)
+    {
+        printf("Creating Vocabulary...\n");
+        initialiseModelCorpus(model, corpus);
+        createHashtable(model, corpus);
+        
+        model->W1 = createArray(model->dimension, model->vocab_size, random_state);
+        model->W2 = createArray(model->vocab_size, model->dimension, random_state);
+        model->b1 = createArray(model->dimension, 1, random_state);
+        model->b2 = createArray(model->vocab_size, 1, random_state);
+        
+        printf("Calculating X and y...\n");
+        createXandY(model, random_state);
+    }
+    
     printf("Initiating Training...\n");
     gradientDescent(model);
-    displayModel(model);
-    return model;
+    
+    if(verbose)
+        displayModel(model);
 }
