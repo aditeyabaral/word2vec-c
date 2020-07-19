@@ -18,8 +18,8 @@ void displayHashtable(EMBEDDING* model)
         if(model->hashtable[i] != NULL)
         {
             printf("%s\n", model->hashtable[i]->word);
-            for(int j=0; j<model->vocab_size; ++j)
-                printf("%.1lf ", model->hashtable[i]->onehotvector[0][j]);
+            for(int j=0; j<model->dimension; ++j)
+                printf("%.1lf ", model->hashtable[i]->wordvector[0][j]);
             printf("\n\n");
         }
     }
@@ -36,8 +36,8 @@ void displayModel(EMBEDDING* model)
     printf("Vocabulary Size: %d\n", model->vocab_size);
     printf("Batch Size: %d\n", model->batch_size);
     printf("Epochs: %d\n\n", model->epochs);
-    //printf("Hashtable: \n");
-    //displayHashtable(model);
+    printf("Hashtable: \n");
+    displayHashtable(model);
     printf("\nX: \n\n");
     displayArray(model->X, model->vocab_size, model->batch_size);
     printf("\ny: \n\n");

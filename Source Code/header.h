@@ -7,7 +7,7 @@
 struct node
 {
     char* word;
-    double* wordvector;
+    double** wordvector;
     double** onehotvector;
 };
 typedef struct node NODE;
@@ -55,6 +55,7 @@ double** subtract(double **M1, double **M2, int m, int n);
 void displayArray(double**, int, int);
 void displayHashtable(EMBEDDING*);
 void displayModel(EMBEDDING* model);
+void extractEmbeddings(EMBEDDING* model);
 char* remove_punctuations(char*);
 int getVocabularySize(EMBEDDING*);
 int getHashvalue(char*, int);

@@ -127,6 +127,22 @@ EMBEDDING* createModel()
     return model;
 }
 
+void extractEmbeddings(EMBEDDING* model)
+{
+    double** W2T = transpose(model->W2, model->vocab_size, model->dimension);
+    double** W1_add_W2T = add(model->W1, W2T, model->dimension, model->vocab_size);
+    double** W = multiply_scalar(W1_add_W2T, 0.5, model->dimension, model->vocab_size);
+    for(int i=0; i< model-> vocab_size;i++)
+    {
+        if (model->hashtable[i]!=NULL)
+        {
+            model->hashtable[i]->wordvector = createZerosArray(1, model->dimension);
+            for(int j=0; j<model->dimension; j++)
+                model->hashtable[i]->wordvector[0][j] = W[j][i];
+        }
+    }
+}
+
 void train(EMBEDDING* model, char* corpus, int C, int N, double alpha, int epochs, int random_state, bool verbose)
 {
     printf("Initialising hyperparameters...\n");
@@ -150,6 +166,8 @@ void train(EMBEDDING* model, char* corpus, int C, int N, double alpha, int epoch
     printf("Initiating Training...\n");
     gradientDescent(model);
     
+    extractEmbeddings(model);
+
     if(verbose)
         displayModel(model);
 }

@@ -14,6 +14,7 @@ Stuff that works: <br>
 
 Stuff we need to verify <br>
 * cost function
+* Extraction of embeddings
 
 ## Compilation
 
@@ -40,7 +41,6 @@ $ ./a.out < textfilename > outputfilename
 
 ## To-Do
 
-* Assign average of W1 and W2 to word vector
 * saveModel(model)
 * loadModel(model)
 * w2v functions like similarity, most_similar etc

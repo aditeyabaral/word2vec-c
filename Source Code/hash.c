@@ -41,6 +41,7 @@ void createHashtable(EMBEDDING* model, char* corpus)
         NODE* node = (NODE*)malloc(sizeof(NODE));
         node->word = (char*)malloc(sizeof(char)*strlen(word));
         strcpy(node->word, word);
+        node->wordvector = NULL;
         node->onehotvector = createOneHot(node, model);
         insert(node, model);
         token = strtok_r(NULL, " ", &save);
