@@ -154,6 +154,7 @@ void writeEmbeddings(EMBEDDING* model)
         fprintf(fp, "%c", '\n');
     }
     fclose(fp);
+    printf("Embedding saved...\n");
 }
 
 void writeParameters(EMBEDDING* model)
@@ -167,6 +168,7 @@ void writeParameters(EMBEDDING* model)
     fprintf(fp, "Corpus Length,%d,\n", model->corpus_length);
     fprintf(fp, "Epochs,%d,\n", model->epochs);
     fclose(fp);
+    printf("Parameters saved...\n");
 }
 
 void writeCorpus(EMBEDDING* model)
@@ -176,13 +178,50 @@ void writeCorpus(EMBEDDING* model)
     fprintf(fp, "Vocabulary,%s,\n\n", model->vocab);
     fprintf(fp, "Corpus,%s,\n\n", model->corpus);
     fclose(fp);
+    printf("Corpus saved...\n");
 }
+
+void writeWeightsBiases(EMBEDDING* model)
+{
+    FILE* fp  = fopen("model-weights-w1.csv", "w");
+    for(int i = 0; i<model->dimension; i++)
+    {
+        for(int j = 0; j<model->vocab_size; j++)
+            fprintf(fp, "%lf,", model->W1[i][j]);
+        fprintf(fp, "%c", '\n');
+    }
+
+    fp  = fopen("model-weights-w2.csv", "w");
+    for(int i = 0; i<model->vocab_size; i++)
+    {
+        for(int j = 0; j<model->dimension; j++)
+            fprintf(fp, "%lf,", model->W2[i][j]);
+        fprintf(fp, "%c", '\n');
+    }
+    printf("Weights saved...\n");
+
+    fp  = fopen("model-bias-b1.csv", "w");
+    for(int i = 0; i<model->dimension; i++)
+        fprintf(fp, "%lf,", model->b1[i][0]);
+    fprintf(fp, "%c", '\n');
+
+    fp  = fopen("model-bias-b2.csv", "w");
+    for(int i = 0; i<model->vocab_size; i++)
+        fprintf(fp, "%lf,", model->b2[i][0]);
+    fprintf(fp, "%c", '\n');
+    
+    fclose(fp);
+    printf("Biases saved...\n");
+}
+
+
 
 void saveModel(EMBEDDING* model, bool write_all)
 {
     writeEmbeddings(model);
     writeParameters(model);
     writeCorpus(model);
+    writeWeightsBiases(model);
     if (write_all)
         writeCorpus(model);
 }

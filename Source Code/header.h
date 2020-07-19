@@ -75,3 +75,4 @@ void saveModel(EMBEDDING* model, bool write_all);
 void writeEmbeddings(EMBEDDING* model);
 void writeParameters(EMBEDDING* model);
 void writeCorpus(EMBEDDING* model);
+void writeWeightsBiases(EMBEDDING* model);
