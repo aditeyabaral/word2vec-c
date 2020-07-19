@@ -8,10 +8,12 @@ Model gets saved automatically, along with parameters
 ## Validation
 Stuff that works: <br>
 * input corpus text preprocessing
-* creation of context vectors (CBOW model) and prediction word vectors (X and y respectively)
+* creation of context vectors for CBOW model (X) and prediction word vectors y)
+* matrix operations for neural network architecture
 * forward propagation
 * back propagation
 * gradient descent
+* saving of model
 
 Stuff we need to verify but *most likely* working<br>
 * cost function
