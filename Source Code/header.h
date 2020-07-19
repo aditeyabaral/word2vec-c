@@ -8,14 +8,14 @@ struct node
 {
     char* word;
     double** wordvector;
-    double** onehotvector;
+    int** onehotvector;
 };
 typedef struct node NODE;
 
 struct embedding
 {
     int context;
-    double alpha;
+    float alpha;
     int dimension;
     int vocab_size;
     int corpus_length;
@@ -41,7 +41,7 @@ typedef struct embedding EMBEDDING;
 double** relu(double**, int, int);
 double** softmax(double** M, int m, int n, int axis);
 EMBEDDING* createModel();
-void initialiseModelParameters(EMBEDDING* model, int C, int N, double alpha, int epochs);
+void initialiseModelParameters(EMBEDDING* model, int C, int N, float alpha, int epochs);
 void initialiseModelCorpus(EMBEDDING* model, char* corpus);
 void initialiseModelHashtable(EMBEDDING*);
 double** createArray(int, int, int);
@@ -60,14 +60,14 @@ char* remove_punctuations(char*);
 int getVocabularySize(EMBEDDING*);
 int getHashvalue(char*, int);
 char* trim(char*);
-double** createOneHot(NODE* node, EMBEDDING* model);
+int** createOneHot(NODE* node, EMBEDDING* model);
 void createHashtable(EMBEDDING*, char*);
 void createXandY(EMBEDDING* model, int random_state);
 double** getX(EMBEDDING* model, int m, char* s);
 double** getY(EMBEDDING* model, int m, char* s);
-void train(EMBEDDING* model, char* corpus, int C, int N, double alpha, int epochs, int random_state, bool verbose);
+void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose);
 void gradientDescent(EMBEDDING* model);
 void back_propagation(EMBEDDING* model);
 void forward_propagation(EMBEDDING* model);
 double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int n2);
-double cost(EMBEDDING* model);
+float cost(EMBEDDING* model);

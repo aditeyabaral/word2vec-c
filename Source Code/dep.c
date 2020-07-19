@@ -1,6 +1,6 @@
 #include "header.h"
 
-void initialiseModelParameters(EMBEDDING* model, int C, int N, double alpha, int epochs)
+void initialiseModelParameters(EMBEDDING* model, int C, int N, float alpha, int epochs)
 {
     if (C > 0)
         model->context = C;
@@ -143,7 +143,7 @@ void extractEmbeddings(EMBEDDING* model)
     }
 }
 
-void train(EMBEDDING* model, char* corpus, int C, int N, double alpha, int epochs, int random_state, bool verbose)
+void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose)
 {
     printf("Initialising hyperparameters...\n");
     initialiseModelParameters(model, C, N, alpha, epochs);

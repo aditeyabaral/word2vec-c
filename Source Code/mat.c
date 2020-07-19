@@ -173,7 +173,7 @@ double **transpose(double**A, int m, int n)
     return trans;
 }
 
-double** createOneHot(NODE* node, EMBEDDING* model)
+int** createOneHot(NODE* node, EMBEDDING* model)
 {
     int index = getHashvalue(node->word, model->vocab_size);
     while(model->hashtable[index] != NULL)
@@ -182,14 +182,28 @@ double** createOneHot(NODE* node, EMBEDDING* model)
             break;
         index = (index+1)%model->vocab_size;
     }
-    double** oneHotVector = createZerosArray(1, model->vocab_size);
+    int** oneHotVector = (int**)malloc(sizeof(int*));
     if(oneHotVector == NULL)
     {
         printf("Failed to allocate memory for one hot vector!\n");
         return NULL;
     }
+    oneHotVector[0] = (int*)malloc(sizeof(int)*model->vocab_size);
+    for(int i=0; i < model->vocab_size; i++)
+        oneHotVector[0][i] = 0;
     oneHotVector[0][index] = 1;
     return oneHotVector;
+}
+
+double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int n2)
+{
+    double **Z1 = createZerosArray(m1, n1);
+    for(int i=0; i<n1; i++)
+    {
+        for(int j=0; j<m1; j++)
+            Z1[j][i] = WX[j][i] + b[j][0];
+    }
+    return Z1;
 }
 
 double** getX(EMBEDDING* model, int m, char* s)
@@ -212,7 +226,7 @@ double** getX(EMBEDDING* model, int m, char* s)
                     break;
                 index = (index+1)%model->vocab_size;
             }
-            double** oneHotVector = model->hashtable[index]->onehotvector;
+            int** oneHotVector = model->hashtable[index]->onehotvector;
             for(int j=0; j<model->vocab_size; j++)
                 example[0][j]+= oneHotVector[0][j];
             token2 = strtok_r(NULL, " ", &save2);
@@ -243,7 +257,7 @@ double** getY(EMBEDDING* model, int m, char* s)
                 break;
             index = (index+1)%model->vocab_size;
         }
-        double** oneHotVector = model->hashtable[index]->onehotvector;
+        int** oneHotVector = model->hashtable[index]->onehotvector;
         for(int j = 0; j<model->vocab_size; j++)
         {
             y[j][col] = oneHotVector[0][j];

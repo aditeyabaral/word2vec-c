@@ -1,30 +1,19 @@
 #include "header.h"
 
-double cost(EMBEDDING* model)
+float cost(EMBEDDING* model)
 {
-    double loss = 0;
+    float loss = 0;
     int m = model->batch_size;
-    double sum;
+    float sum;
     for (int i=0; i<m; i++)
     {
         sum = 0;
         for(int j = 0; j<model->vocab_size; j++)
-            sum+= (model->Y[j][i])*log(model->yhat[j][i]);
+            sum+= (model->Y[j][i])*log(model->yhat[j][i]) + (1-model->Y[j][i])*log(1-model->yhat[j][j]);
         loss+= sum;
     }
     loss = (-1.0/m)*loss;
     return loss;
-}
-
-double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int n2)
-{
-    double **Z1 = createZerosArray(m1, n1);
-    for(int i=0; i<n1; i++)
-    {
-        for(int j=0; j<m1; j++)
-            Z1[j][i] = WX[j][i] + b[j][0];
-    }
-    return Z1;
 }
 
 void forward_propagation(EMBEDDING* model)
