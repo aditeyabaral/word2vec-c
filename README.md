@@ -2,6 +2,9 @@
 Finding Distributed Representations of Words<br>
 Note - The project is not complete and is a work in progress. Once finished all changes will be moved to [NLPC](https://github.com/aditeyabaral/NLPC).
 
+Remember to redirect output to a text file after you execute. The application quits after training.
+
+## Validation
 Stuff that works: <br>
 * input corpus text preprocessing
 * creation of context vectors (CBOW model) and prediction word vectors (X and y respectively)
@@ -9,11 +12,9 @@ Stuff that works: <br>
 * back propagation
 * gradient descent
 
-Stuff we aren't sure that might work: <br>
+Stuff we need to verify <br>
 * cost function
 
-Remember to redirect output to a text file after you execute. The application quits after training.
- 
 ## Compilation
 
 Convert into executable shell scripts with<br>
@@ -37,4 +38,9 @@ Followed by
 $ ./a.out < textfilename > outputfilename
 ```
 
+## To-Do
 
+* Assign average of W1 and W2 to word vector
+* saveModel(model)
+* loadModel(model)
+* w2v functions like similarity, most_similar etc
