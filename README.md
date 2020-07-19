@@ -17,7 +17,7 @@ Stuff we need to verify but *most likely* working<br>
 * cost function
 * Extraction of embeddings
 
-## Compilation
+## Compilation & Execution
 
 Convert into executable shell scripts with<br>
 
@@ -42,5 +42,8 @@ $ ./a.out < textfilename
 
 ## To-Do
 
+* reduce memory leaks
 * loading model from file
+    * support load and use
+    * support load and train
 * w2v functions like similarity, most_similar etc

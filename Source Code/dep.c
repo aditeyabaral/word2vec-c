@@ -224,6 +224,13 @@ void saveModel(EMBEDDING* model, bool write_all)
         writeCorpus(model);
 }
 
+EMBEDDING* loadModel(char* embedding_filename)
+{
+    EMBEDDING* model = createModel();
+    //todo
+    return model;
+}
+
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose)
 {
     printf("Initialising hyperparameters...\n");
