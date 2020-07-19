@@ -2,13 +2,14 @@
 Finding Distributed Representations of Words<br>
 Note - The project is not complete and is a work in progress. Once finished all changes will be moved to [NLPC](https://github.com/aditeyabaral/NLPC).
 
+
+Model gets saved automatically, along with parameters.
 Documentation for functions will be added soon :)<br>
-Model gets saved automatically, along with parameters
 
 ## Validation
 Stuff that works: <br>
 * input corpus text preprocessing
-* creation of context vectors for CBOW model (X) and prediction word vectors y)
+* creation of context vectors for CBOW model (X) and prediction word vectors (y)
 * matrix operations for neural network architecture
 * forward propagation
 * back propagation
