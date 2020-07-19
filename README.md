@@ -2,7 +2,7 @@
 Finding Distributed Representations of Words<br>
 Note - The project is not complete and is a work in progress. Once finished all changes will be moved to [NLPC](https://github.com/aditeyabaral/NLPC).
 
-Remember to redirect output to a text file after you execute. The application quits after training.
+Documentation for functions will be added soon :)
 
 ## Validation
 Stuff that works: <br>
@@ -12,7 +12,7 @@ Stuff that works: <br>
 * back propagation
 * gradient descent
 
-Stuff we need to verify <br>
+Stuff we need to verify but *most likely* working<br>
 * cost function
 * Extraction of embeddings
 
@@ -36,11 +36,11 @@ $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c -lm
 Followed by
 
 ```
-$ ./a.out < textfilename > outputfilename
+$ ./a.out < textfilename 
 ```
 
 ## To-Do
 
-* saveModel(model)
-* loadModel(model)
+* saving weights and biases
+* loading model from file
 * w2v functions like similarity, most_similar etc
