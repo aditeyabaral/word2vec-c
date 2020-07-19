@@ -103,7 +103,7 @@ void createXandY(EMBEDDING* model, int random_state)
     model->batch_size = m;
     printf("Obtaining X matrix...\n");
     model->X = getX(model, m, X_words);
-    printf("Obtaining y matrix...\n");
+    printf("Obtaining y matrix...\n\n");
     model->Y = getY(model, m, y_words);
 }
 
@@ -117,7 +117,7 @@ EMBEDDING* train(char* corpus, int C, int N, double alpha, int epochs, int rando
     model->W2 = createArray(model->vocab_size, model->dimension, random_state);
     model->b1 = createArray(model->dimension, 1, random_state);
     model->b2 = createArray(model->vocab_size, 1, random_state);
-    printf("Creating X and y...\n");
+    printf("Calculating X and y...\n");
     createXandY(model, random_state);
     printf("Initiating Training...\n");
     gradientDescent(model);

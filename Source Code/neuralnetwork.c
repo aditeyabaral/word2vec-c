@@ -9,10 +9,7 @@ double cost(EMBEDDING* model)
     {
         sum = 0;
         for(int j = 0; j<model->vocab_size; j++)
-        {
-            //printf("Y: %lf YHAT: %lf LOG YHAT: %lf\n", model->Y[j][i], model->yhat[j][i], log(model->yhat[j][i]));
             sum+= (model->Y[j][i])*log(model->yhat[j][i]);
-        }
         loss+= sum;
     }
     loss = (-1.0/m)*loss;
@@ -33,21 +30,25 @@ double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int 
 void forward_propagation(EMBEDDING* model)
 {
     double **W1X = multiply(model->W1, model->X, model->dimension, model->vocab_size, model->vocab_size, model->batch_size);
-    //printf("W1X:\n");
-    //displayArray(W1X, model->dimension, model->batch_size);
     model->Z1 = broadcast_and_add(W1X, model->b1, model->dimension, model->batch_size, model->dimension, 1);
-    //printf("Z1:\n");
-    //displayArray(model->Z1, model->dimension, model->batch_size);
     model->A1 = relu(model->Z1, model->dimension, model->batch_size);
-    //printf("A1:\n");
-    //displayArray(model->A1, model->dimension, model->batch_size);
+    
     double **W2A1 = multiply(model->W2, model->A1, model->vocab_size, model->dimension, model->dimension, model->batch_size);
     model->Z2 = broadcast_and_add(W2A1, model->b2, model->vocab_size, model->batch_size, model->vocab_size, 1);
-    //printf("Z2:\n");
-    //displayArray(model->Z2, model->vocab_size, model->batch_size);
     model->yhat = softmax(model->Z2, model->vocab_size, model->batch_size, 1);
-    //printf("A2: \n");
-    //displayArray(model->yhat, model->vocab_size, model->batch_size);
+    
+    #if 0
+    printf("W1X:\n");
+    displayArray(W1X, model->dimension, model->batch_size);
+    printf("Z1:\n");
+    displayArray(model->Z1, model->dimension, model->batch_size);
+    printf("A1:\n");
+    displayArray(model->A1, model->dimension, model->batch_size);
+    printf("Z2:\n");
+    displayArray(model->Z2, model->vocab_size, model->batch_size);
+    printf("A2: \n");
+    displayArray(model->yhat, model->vocab_size, model->batch_size);
+    #endif
 }
 
 void back_propagation(EMBEDDING* model)
@@ -84,16 +85,37 @@ void back_propagation(EMBEDDING* model)
 
     double** alpha_db2 = multiply_scalar(db2, model->alpha, model->vocab_size, 1);
     model->b2 = subtract(model->b2, alpha_db2, model->vocab_size, 1);
+
+    #if 0
+    printf("dW1: \n");
+    displayArray(dW1, model->dimension, model->vocab_size);
+    printf("dW2: \n");
+    displayArray(dW2, model->vocab_size, model->dimension);
+    printf("db1: \n");
+    displayArray(db1, model->dimension, 1);
+    printf("db2 \n");
+    displayArray(db2, model->vocab_size, 1);
+    printf("After subtraction:\n\n");
+    printf("\nW1: \n");
+    displayArray(model->W1, model->dimension, model->vocab_size);
+    printf("\nW2: \n");
+    displayArray(model->W2, model->vocab_size, model->dimension);
+    printf("\nb1: \n");
+    displayArray(model->b1, model->dimension, 1);
+    printf("\nb2: \n");
+    displayArray(model->b2, model->vocab_size, 1);
+    #endif
 }
 
 void gradientDescent(EMBEDDING* model)
 {
     double loss;
-    for(int i=0; i< model->epochs; i++)
+    for(int i=0; i < model->epochs; i++)
     {
         forward_propagation(model);
         loss = cost(model);
         printf("Epoch: %d Loss: %lf\n", i, loss);
         back_propagation(model);
     }
+    printf("Training completed.\n\n");
 }

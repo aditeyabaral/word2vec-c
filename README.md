@@ -5,11 +5,12 @@ Note - The project is not complete and is a work in progress. Once finished all 
 Stuff that works: <br>
 * input corpus text preprocessing
 * creation of context vectors (CBOW model) and prediction word vectors (X and y respectively)
-* forward propagation in neural network
+* forward propagation
+* back propagation
+* gradient descent
 
 Stuff we aren't sure that might work: <br>
-* back propagation
-* cost function, softmax implementation
+* cost function
 
 Remember to redirect output to a text file after you execute. The application quits after training.
  
