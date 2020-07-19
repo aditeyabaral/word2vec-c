@@ -2,7 +2,7 @@
 Finding Distributed Representations of Words<br>
 Note - The project is not complete and is a work in progress. Once finished all changes will be moved to [NLPC](https://github.com/aditeyabaral/NLPC).
 
-Documentation for functions will be added soon :)
+Documentation for functions will be added soon :)<br>
 Model gets saved automatically, along with parameters
 
 ## Validation

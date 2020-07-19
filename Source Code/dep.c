@@ -209,12 +209,10 @@ void writeWeightsBiases(EMBEDDING* model)
     for(int i = 0; i<model->vocab_size; i++)
         fprintf(fp, "%lf,", model->b2[i][0]);
     fprintf(fp, "%c", '\n');
-    
+
     fclose(fp);
     printf("Biases saved...\n");
 }
-
-
 
 void saveModel(EMBEDDING* model, bool write_all)
 {
