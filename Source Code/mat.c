@@ -209,6 +209,35 @@ double dot(double** v1, double** v2, int n)
     return result;
 }
 
+double cosine_similarity(double** v1, double** v2, int N)
+{
+    return dot(v1, v2, N)/(norm(v1, 1, N)*norm(v2, 1, N));
+}
+
+double similarity(EMBEDDING* model, char* word1, char* word2)
+{
+    double** v1 = getVector(model, word1);
+    double** v2 = getVector(model, word2);
+    if(v1 == NULL)
+    {
+        printf("%s does not belong in vocabulary.\n", word1);
+        return -1;
+    }
+    if(v2 == NULL)
+    {
+        printf("%s does not belong in vocabulary.\n", word2);
+        return -1;
+    }
+    return cosine_similarity(v1, v2, model->dimension);
+}
+
+double distance(EMBEDDING* model, char* word1, char* word2)
+{
+    double** v1 = getVector(model, word1);
+    double** v2 = getVector(model, word2);
+    return 1.0-cosine_similarity(v1, v2, model->dimension);
+}
+
 double norm(double** M, int m, int n)
 {
     double result = 0;
