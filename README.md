@@ -39,7 +39,6 @@ $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c -lm
 
 ## Execution
 
-Execute with
 
 ```
 $ ./a.out < corpus_textfilename 
