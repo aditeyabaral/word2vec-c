@@ -206,6 +206,26 @@ double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int 
     return Z1;
 }
 
+double dot(double** v1, double** v2, int n)
+{
+    double result = 0;
+    for(int i = 0; i<n; i++)
+        result+= v1[0][i] * v2[0][i];
+    return result;
+}
+
+double norm(double** M, int m, int n)
+{
+    double result = 0;
+    for(int i = 0; i<m; i++)
+    {
+        for(int j = 0; j < n; j++)
+            result+= M[i][j]*M[i][j];
+    }
+    result = sqrt(result);
+    return result;
+}
+
 double** getX(EMBEDDING* model, int m, char* s)
 {
     double** X = createZerosArray(model->vocab_size, m);

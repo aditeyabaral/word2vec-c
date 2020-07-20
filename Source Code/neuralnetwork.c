@@ -102,6 +102,7 @@ void back_propagation(EMBEDDING* model)
     printf("\nb2: \n");
     displayArray(model->b2, model->vocab_size, 1);
     #endif
+    
     free2D(W2T, model->dimension, model->vocab_size);
     free2D(yhat_diff_y, model->vocab_size, model->batch_size);
     free2D(W2T_mul_yhat_diff_y, model->dimension, model->batch_size);

@@ -1,25 +1,5 @@
 #include "header.h"
 
-double dot(double** v1, double** v2, int n)
-{
-    double result = 0;
-    for(int i = 0; i<n; i++)
-        result+= v1[0][i] * v2[0][i];
-    return result;
-}
-
-double norm(double** M, int m, int n)
-{
-    double result = 0;
-    for(int i = 0; i<m; i++)
-    {
-        for(int j = 0; j < n; j++)
-            result+= M[i][j]*M[i][j];
-    }
-    result = sqrt(result);
-    return result;
-}
-
 double similarity(EMBEDDING* model, char* word1, char* word2)
 {
     double** v1 = getWordVector(model, word1);

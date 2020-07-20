@@ -144,6 +144,8 @@ double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int 
 double** getX(EMBEDDING* model, int m, char* s);
 /* Get matrix Y from matrix of target words */
 double** getY(EMBEDDING* model, int m, char* s);
+double dot(double** v1, double** v2, int n);
+double norm(double** M, int m, int n);
 
 /*
 NEURAL NETWORK FUNCTIONS
@@ -169,3 +171,10 @@ char* remove_punctuations(char*);
 char* trim(char*);
 /* Get the number of words in the vocabulary from the corpus */
 int getVocabularySize(EMBEDDING*);
+
+/*
+FUNCTIONALITIES
+*/
+
+double similarity(EMBEDDING* model, char* word1, char* word2);
+double** getWordVector(EMBEDDING* model, char* word);
