@@ -214,6 +214,11 @@ double cosine_similarity(double** v1, double** v2, int N)
     return dot(v1, v2, N)/(norm(v1, 1, N)*norm(v2, 1, N));
 }
 
+double cosine_distance(double** v1, double** v2, int N)
+{
+    return 1.0 - cosine_similarity(v2, v2, N);
+}
+
 double similarity(EMBEDDING* model, char* word1, char* word2)
 {
     double** v1 = getVector(model, word1);

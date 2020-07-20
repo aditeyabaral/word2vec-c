@@ -20,7 +20,7 @@ Stuff we need to verify but *most likely* working<br>
 * cost function
 * Extraction of embeddings
 
-## Compilation & Execution
+## Compilation
 
 Convert into executable shell scripts with<br>
 
@@ -37,11 +37,38 @@ or
 $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c -lm
 ```
 
-Followed by
+## Execution
+
+Execute with
 
 ```
-$ ./a.out < textfilename 
+$ ./a.out < corpus_textfilename 
 ```
+
+## Supported Functionalities (Work in Progress)
+
+To find the cosine similarity between two words, use
+```
+double sim = similarity(model, word1, word2);
+```
+
+To find the cosine distance, use 
+```
+double dist = distance(model, word1, word2);
+```
+
+A word's embedding can be extracted with
+```
+double** vector = getVector(model, word);
+```
+
+Similary, to obtain the word most similar to a vector, use
+```
+char* word = getWord(model, vetor);
+```
+
+More support coming soon!
+
 
 ## To-Do
 
