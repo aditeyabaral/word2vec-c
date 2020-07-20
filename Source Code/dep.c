@@ -21,9 +21,14 @@ void initialiseModelCorpus(EMBEDDING* model, char* corpus)
     model->corpus_length = len;
     model->corpus = (char*)malloc(sizeof(char)*len);
     model->clean_corpus = (char*)malloc(sizeof(char)*len);
-    char* cleaned_corpus = trim(remove_punctuations(corpus));
-    strcpy(model->clean_corpus, cleaned_corpus);
+    
+    char* no_punkt = remove_punctuations(corpus);
+    char* cleaned_corpus = trim(no_punkt);
     strcpy(model->corpus, corpus);
+    strcpy(model->clean_corpus, cleaned_corpus);
+    
+    free(no_punkt);
+    free(cleaned_corpus);
 }
 
 void initialiseModelHashtable(EMBEDDING* model)
@@ -96,6 +101,11 @@ void createXandY(EMBEDDING* model, int random_state)
     model->X = getX(model, m, X_words);
     printf("Obtaining y matrix...\n\n");
     model->Y = getY(model, m, y_words);
+
+    free(temp1);
+    free(temp2);
+    free(X_words);
+    free(y_words);
 }
 
 EMBEDDING* createModel()
@@ -120,9 +130,7 @@ EMBEDDING* createModel()
     model->W2 = NULL;
     model->X = NULL;
     model->Y = NULL;
-    model->yhat = NULL;
-    model->Z1 = NULL;
-    model->Z2 = NULL;
+    model->A2 = NULL;
 
     return model;
 }
@@ -141,94 +149,9 @@ void extractEmbeddings(EMBEDDING* model)
                 model->hashtable[i]->wordvector[0][j] = W[j][i];
         }
     }
-}
-
-void writeEmbeddings(EMBEDDING* model)
-{
-    FILE* fp  = fopen("model-embeddings.csv", "w");
-    for(int i = 0; i < model->vocab_size; i++)
-    {
-        fprintf(fp, "%s,", model->hashtable[i]->word);
-        for(int j = 0; j < model->dimension; j++)
-            fprintf(fp, "%lf,", model->hashtable[i]->wordvector[0][j]);
-        fprintf(fp, "%c", '\n');
-    }
-    fclose(fp);
-    printf("Embedding saved...\n");
-}
-
-void writeParameters(EMBEDDING* model)
-{
-    FILE* fp  = fopen("model-parameters.csv", "w");
-    fprintf(fp, "alpha,%f,\n", model->alpha);
-    fprintf(fp, "C,%d,\n", model->context);
-    fprintf(fp, "N,%d,\n", model->dimension);
-    fprintf(fp, "Vocabulary Size,%d,\n", model->vocab_size);
-    fprintf(fp, "Batch Size,%d,\n", model->batch_size);
-    fprintf(fp, "Corpus Length,%d,\n", model->corpus_length);
-    fprintf(fp, "Epochs,%d,\n", model->epochs);
-    fclose(fp);
-    printf("Parameters saved...\n");
-}
-
-void writeCorpus(EMBEDDING* model)
-{
-    FILE* fp  = fopen("model-corpus.txt", "w");
-    fprintf(fp, "Cleaned Corpus,%s,\n\n", model->clean_corpus);
-    fprintf(fp, "Vocabulary,%s,\n\n", model->vocab);
-    fprintf(fp, "Corpus,%s,\n\n", model->corpus);
-    fclose(fp);
-    printf("Corpus saved...\n");
-}
-
-void writeWeightsBiases(EMBEDDING* model)
-{
-    FILE* fp  = fopen("model-weights-w1.csv", "w");
-    for(int i = 0; i<model->dimension; i++)
-    {
-        for(int j = 0; j<model->vocab_size; j++)
-            fprintf(fp, "%lf,", model->W1[i][j]);
-        fprintf(fp, "%c", '\n');
-    }
-
-    fp  = fopen("model-weights-w2.csv", "w");
-    for(int i = 0; i<model->vocab_size; i++)
-    {
-        for(int j = 0; j<model->dimension; j++)
-            fprintf(fp, "%lf,", model->W2[i][j]);
-        fprintf(fp, "%c", '\n');
-    }
-    printf("Weights saved...\n");
-
-    fp  = fopen("model-bias-b1.csv", "w");
-    for(int i = 0; i<model->dimension; i++)
-        fprintf(fp, "%lf,", model->b1[i][0]);
-    fprintf(fp, "%c", '\n');
-
-    fp  = fopen("model-bias-b2.csv", "w");
-    for(int i = 0; i<model->vocab_size; i++)
-        fprintf(fp, "%lf,", model->b2[i][0]);
-    fprintf(fp, "%c", '\n');
-
-    fclose(fp);
-    printf("Biases saved...\n");
-}
-
-void saveModel(EMBEDDING* model, bool write_all)
-{
-    writeEmbeddings(model);
-    writeParameters(model);
-    writeCorpus(model);
-    writeWeightsBiases(model);
-    if (write_all)
-        writeCorpus(model);
-}
-
-EMBEDDING* loadModel(char* embedding_filename)
-{
-    EMBEDDING* model = createModel();
-    //todo
-    return model;
+    free(W2T);
+    free(W1_add_W2T);
+    free(W);
 }
 
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose)

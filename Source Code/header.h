@@ -27,10 +27,8 @@ struct embedding
     double **b2;
     double** X;
     double** Y;
-    double** Z1;
-    double** Z2;
     double** A1;
-    double** yhat;
+    double** A2;
     char* vocab;
     char* corpus;
     char* clean_corpus;

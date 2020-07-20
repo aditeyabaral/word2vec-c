@@ -237,6 +237,7 @@ double** getX(EMBEDDING* model, int m, char* s)
         for(int j = 0; j<model->vocab_size; j++)
             X[j][col] = example[0][j];
         col++;
+        free(example);
         token1 = strtok_r(NULL, "\n", &save1);
     }
     return X;
@@ -259,9 +260,7 @@ double** getY(EMBEDDING* model, int m, char* s)
         }
         int** oneHotVector = model->hashtable[index]->onehotvector;
         for(int j = 0; j<model->vocab_size; j++)
-        {
             y[j][col] = oneHotVector[0][j];
-        }
         col++;
         token = strtok_r(NULL, "\n", &save);
     }

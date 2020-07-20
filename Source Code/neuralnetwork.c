@@ -9,7 +9,7 @@ float cost(EMBEDDING* model)
     {
         sum = 0;
         for(int j = 0; j<model->vocab_size; j++)
-            sum+= (model->Y[j][i])*log(model->yhat[j][i]) + (1-model->Y[j][i])*log(1-model->yhat[j][j]);
+            sum+= (model->Y[j][i])*log(model->A2[j][i]) + (1-model->Y[j][i])*log(1-model->A2[j][j]);
         loss+= sum;
     }
     loss = (-1.0/m)*loss;
@@ -18,14 +18,22 @@ float cost(EMBEDDING* model)
 
 void forward_propagation(EMBEDDING* model)
 {
+    free(model->A1);
+    free(model->A2);
+
     double **W1X = multiply(model->W1, model->X, model->dimension, model->vocab_size, model->vocab_size, model->batch_size);
-    model->Z1 = broadcast_and_add(W1X, model->b1, model->dimension, model->batch_size, model->dimension, 1);
-    model->A1 = relu(model->Z1, model->dimension, model->batch_size);
+    double **Z1 = broadcast_and_add(W1X, model->b1, model->dimension, model->batch_size, model->dimension, 1);
+    model->A1 = relu(Z1, model->dimension, model->batch_size);
     
     double **W2A1 = multiply(model->W2, model->A1, model->vocab_size, model->dimension, model->dimension, model->batch_size);
-    model->Z2 = broadcast_and_add(W2A1, model->b2, model->vocab_size, model->batch_size, model->vocab_size, 1);
-    model->yhat = softmax(model->Z2, model->vocab_size, model->batch_size, 1);
+    double **Z2 = broadcast_and_add(W2A1, model->b2, model->vocab_size, model->batch_size, model->vocab_size, 1);
+    model->A2 = softmax(Z2, model->vocab_size, model->batch_size, 1);
     
+    free(W1X);
+    free(Z1);
+    free(W2A1);
+    free(Z2);
+
     #if 0
     printf("W1X:\n");
     displayArray(W1X, model->dimension, model->batch_size);
@@ -36,27 +44,39 @@ void forward_propagation(EMBEDDING* model)
     printf("Z2:\n");
     displayArray(model->Z2, model->vocab_size, model->batch_size);
     printf("A2: \n");
-    displayArray(model->yhat, model->vocab_size, model->batch_size);
+    displayArray(model->A2, model->vocab_size, model->batch_size);
     #endif
 }
 
 void back_propagation(EMBEDDING* model)
 {
+
+    /*
+    Fix memory leaks here. All other memory leaks are mostly fixed, or only from stuff that cannot be freed like hashtable.
+    
+    Reason for leak: same variable is used to store results of multiple funcation calls, hence value gets overwritten
+    but memory is not freed. Example - db1 called in relu(), multiply() and multiply_scalar()
+    
+    How to fix: Assign differen variable names for partial products. Then free all of them. I've done W1 & W2 as example.
+
+    */
+
     double **W2T = transpose(model->W2, model->vocab_size, model->dimension);
-    double **yhat_diff_y = subtract(model->yhat, model->Y, model->vocab_size, model->batch_size);
-    double **W2T_mul_y_hat_diff_y = multiply(W2T, yhat_diff_y, model->dimension, model->vocab_size, model->vocab_size, model->batch_size);
+    double **yhat_diff_y = subtract(model->A2, model->Y, model->vocab_size, model->batch_size);
+    double **W2T_mul_yhat_diff_y = multiply(W2T, yhat_diff_y, model->dimension, model->vocab_size, model->vocab_size, model->batch_size);
+    double **relu_W2T_yhat_diff_y = relu(W2T_mul_yhat_diff_y, model->dimension, model->batch_size);
     double **OnesVector = createOnesArray(model->batch_size, 1);
     double ratio = 1.0/model->batch_size;
 
-    double** dW1 = relu(W2T_mul_y_hat_diff_y, model->dimension, model->batch_size);
-    dW1 = multiply(dW1, transpose(model->X, model->vocab_size, model->batch_size), model->dimension, model->batch_size, model->batch_size, model->vocab_size);
-    dW1 = multiply_scalar(dW1, ratio, model->dimension, model->vocab_size);
+    double** XT = transpose(model->X, model->vocab_size, model->batch_size);
+    double** dW1_partial_product = multiply(relu_W2T_yhat_diff_y, XT, model->dimension, model->batch_size, model->batch_size, model->vocab_size);
+    double** dW1 = multiply_scalar(dW1_partial_product, ratio, model->dimension, model->vocab_size);
 
     double** AT = transpose(model->A1, model->dimension, model->batch_size);
-    double** dW2 = multiply(yhat_diff_y, AT, model->vocab_size, model->batch_size, model->batch_size, model->dimension);
-    dW2 = multiply_scalar(dW2, ratio, model->vocab_size, model->dimension);
+    double** dW2_partial_product = multiply(yhat_diff_y, AT, model->vocab_size, model->batch_size, model->batch_size, model->dimension);
+    double** dW2 = multiply_scalar(dW2_partial_product, ratio, model->vocab_size, model->dimension);
 
-    double** db1 = relu(W2T_mul_y_hat_diff_y, model->dimension, model->batch_size);
+    double** db1 = relu(W2T_mul_yhat_diff_y, model->dimension, model->batch_size);
     db1 = multiply(db1, OnesVector, model->dimension, model->batch_size, model->batch_size, 1);
     db1 = multiply_scalar(db1, ratio, model->dimension, 1);
 
@@ -74,6 +94,24 @@ void back_propagation(EMBEDDING* model)
 
     double** alpha_db2 = multiply_scalar(db2, model->alpha, model->vocab_size, 1);
     model->b2 = subtract(model->b2, alpha_db2, model->vocab_size, 1);
+
+    free(W2T);
+    free(yhat_diff_y);
+    free(W2T_mul_yhat_diff_y);
+    free(OnesVector);
+    free(dW1);
+    free(XT);
+    free(relu_W2T_yhat_diff_y);
+    free(dW1_partial_product);
+    free(AT);
+    free(dW2_partial_product);
+    free(dW2);
+    free(db1);
+    free(db2);
+    free(alpha_dW1);
+    free(alpha_dW2);
+    free(alpha_db1);
+    free(alpha_db2);
 
     #if 0
     printf("dW1: \n");

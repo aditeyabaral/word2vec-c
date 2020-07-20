@@ -82,9 +82,12 @@ int getVocabularySize(EMBEDDING* model)
         }
         token1 = strtok_r(NULL, " ", &save1);
     }
+    int len2 = strlen(temp2);
+    temp2[len2-1] = '\0';
+    model->vocab = (char*)malloc(sizeof(char)*len2);
+    strcpy(model->vocab, temp2);
     free(temp1);
+    free(temp2);
     free(temp3);
-    temp2[strlen(temp2)-1] = '\0';
-    model->vocab = temp2;
     return V;
 }

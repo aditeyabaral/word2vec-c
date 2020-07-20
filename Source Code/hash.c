@@ -46,4 +46,5 @@ void createHashtable(EMBEDDING* model, char* corpus)
         insert(node, model);
         token = strtok_r(NULL, " ", &save);
     }
+    free(temp);
 }
