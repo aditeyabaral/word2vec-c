@@ -158,7 +158,7 @@ void forward_propagation(EMBEDDING* model);
 /* A single backward pass through the neural network (by calculating the gradients) */
 void back_propagation(EMBEDDING* model);
 /* A single forward pass, followed by a backward pass and the parameter update step */
-void gradientDescent(EMBEDDING* model);
+void gradientDescent(EMBEDDING* model, bool save);
 
 
 /*

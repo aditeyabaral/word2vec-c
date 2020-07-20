@@ -154,7 +154,7 @@ void extractEmbeddings(EMBEDDING* model)
     free2D(W, model->dimension, model->vocab_size);
 }
 
-void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose)
+void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool save)
 {
     printf("Initialising hyperparameters...\n");
     initialiseModelParameters(model, C, N, alpha, epochs);
@@ -175,8 +175,6 @@ void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs
     }
     
     printf("Initiating Training...\n");
-    gradientDescent(model);
+    gradientDescent(model, save);
     extractEmbeddings(model);
-    if(verbose)
-        displayModel(model);
 }
