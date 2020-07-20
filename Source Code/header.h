@@ -152,7 +152,7 @@ NEURAL NETWORK FUNCTIONS
 */
 
 /* Implements the binary cross entropy cost function*/
-float cost(EMBEDDING* model);
+double cost(EMBEDDING* model);
 /* A single forward pass through the neural network */
 void forward_propagation(EMBEDDING* model);
 /* A single backward pass through the neural network (by calculating the gradients) */

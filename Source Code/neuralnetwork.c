@@ -1,10 +1,10 @@
 #include "header.h"
 
-float cost(EMBEDDING* model)
+double cost(EMBEDDING* model)
 {
-    float loss = 0;
+    double loss = 0;
     int m = model->batch_size;
-    float sum;
+    double sum;
     for (int i=0; i<m; i++)
     {
         sum = 0;
