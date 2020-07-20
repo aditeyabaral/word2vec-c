@@ -45,7 +45,6 @@ $ ./a.out < textfilename
 
 ## To-Do
 
-* reduce memory leaks
 * loading model from file
     * support load and use
     * support load and train
