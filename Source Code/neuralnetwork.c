@@ -18,8 +18,10 @@ float cost(EMBEDDING* model)
 
 void forward_propagation(EMBEDDING* model)
 {
-    free(model->A1);
-    free(model->A2);
+    if(model->A1 != NULL)
+        free2D(model->A1, model->dimension, model->batch_size);
+    if(model->A2 != NULL)
+        free2D(model->A2, model->vocab_size, model->batch_size);
 
     double **W1X = multiply(model->W1, model->X, model->dimension, model->vocab_size, model->vocab_size, model->batch_size);
     double **Z1 = broadcast_and_add(W1X, model->b1, model->dimension, model->batch_size, model->dimension, 1);
@@ -102,7 +104,7 @@ void back_propagation(EMBEDDING* model)
     printf("\nb2: \n");
     displayArray(model->b2, model->vocab_size, 1);
     #endif
-    
+
     free2D(W2T, model->dimension, model->vocab_size);
     free2D(yhat_diff_y, model->vocab_size, model->batch_size);
     free2D(W2T_mul_yhat_diff_y, model->dimension, model->batch_size);

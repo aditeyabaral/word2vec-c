@@ -172,6 +172,9 @@ char* trim(char*);
 /* Get the number of words in the vocabulary from the corpus */
 int getVocabularySize(EMBEDDING*);
 
+
+
+
 /*
 FUNCTIONALITIES
 */

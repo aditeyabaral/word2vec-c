@@ -1,13 +1,25 @@
 #include "header.h"
 
+double cosine_similarity(double** v1, double** v2, int N)
+{
+    return dot(v1, v2, N)/(norm(v1, 1, N)*norm(v2, 1, N));
+}
+
 double similarity(EMBEDDING* model, char* word1, char* word2)
 {
     double** v1 = getWordVector(model, word1);
     double** v2 = getWordVector(model, word2);
-    return dot(v1, v2, model->dimension)/(norm(v1, 1, model->dimension)*norm(v2, 1, model->dimension));
+    return cosine_similarity(v1, v2, model->dimension);
 }
 
-double** getWordVector(EMBEDDING* model, char* word)
+double distance(EMBEDDING* model, char* word1, char* word2)
+{
+    double** v1 = getWordVector(model, word1);
+    double** v2 = getWordVector(model, word2);
+    return 1.0-cosine_similarity(v1, v2, model->dimension);
+}
+
+double** getVector(EMBEDDING* model, char* word)
 {
     int index = getHashvalue(word, model->vocab_size);
     int ctr = 0;
@@ -22,3 +34,17 @@ double** getWordVector(EMBEDDING* model, char* word)
     return NULL;
 }
 
+char* getWord(EMBEDDING* model, double** vector)
+{
+    char* word = (char*)malloc(sizeof(char)*50);
+    double max_sim = -1.0, sim;
+    for(int i = 0; i < model->vocab_size; i++)
+    {
+        sim = cosine_similarity(vector, model->hashtable[i]->wordvector, model->dimension);
+        if (sim > max_sim)
+        {
+            max_sim = sim;
+
+        }
+    }
+}
