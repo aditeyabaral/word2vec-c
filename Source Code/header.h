@@ -75,7 +75,7 @@ void writeEmbeddings(EMBEDDING* model);
 void writeParameters(EMBEDDING* model);
 /* Write clean and original corpus along with the vocabulary to model-corpus.txt */
 void writeCorpus(EMBEDDING* model);
-/* Write weights and biases of the NN model to model-weights-wi.csv and model-biases-bi.csv where i = 1,2 */
+/* Write weights and biases of the NN model to model-weights-wi.csv and model-biases-bi.csv where i = 1, 2 */
 void writeWeightsBiases(EMBEDDING* model);
 /* Call writeEmbeddings, writeParameters and writeCorpus */
 void saveModel(EMBEDDING* model, bool write_all);
