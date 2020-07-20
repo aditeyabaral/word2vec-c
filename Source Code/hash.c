@@ -9,7 +9,7 @@ int getHashvalue(char *word, int vocab_size)
         val+= word[i]*(i+1);;
         i++;
     }
-    val%= vocab_size;
+    val %= vocab_size;
     return val;
 }
 

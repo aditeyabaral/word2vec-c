@@ -9,6 +9,6 @@ int main()
     //train(model, NULL, -1, -1, 0.01, 10000, 0, true); // to train from checkpoints
     saveModel(model, false);    // false - do not save model's corpus
     free(s);
-    free(model);
+    destroyModel(model);
     return 0;   
 }
