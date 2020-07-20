@@ -8,5 +8,6 @@ int main()
     train(model, s, 3, 100, 0.01, 100000, 0, false);
     //train(model, NULL, -1, -1, 0.01, 10000, 0, true); // to train from checkpoints
     saveModel(model, false);    // false - do not save model's corpi
+    destroyModel(model);
     return 0;   
 }

@@ -25,7 +25,8 @@ void forward_propagation(EMBEDDING* model)
     double **W2A1 = multiply(model->W2, model->A1, model->vocab_size, model->dimension, model->dimension, model->batch_size);
     model->Z2 = broadcast_and_add(W2A1, model->b2, model->vocab_size, model->batch_size, model->vocab_size, 1);
     model->yhat = softmax(model->Z2, model->vocab_size, model->batch_size, 1);
-    
+    free2D(W1X, model->dimension, model->batch_size);
+    free2D(W2A1, model->vocab_size, model->batch_size);
     #if 0
     printf("W1X:\n");
     displayArray(W1X, model->dimension, model->batch_size);
@@ -94,6 +95,20 @@ void back_propagation(EMBEDDING* model)
     printf("\nb2: \n");
     displayArray(model->b2, model->vocab_size, 1);
     #endif
+
+    free2D(W2T, model->dimension, model->vocab_size);
+    free2D(yhat_diff_y, model->vocab_size, model->batch_size);
+    free2D(W2T_mul_y_hat_diff_y, model->dimension, model->batch_size);
+    free2D(OnesVector, model->batch_size, 1);
+    free2D(dW1, model->dimension, model->vocab_size);
+    free2D(AT, model->batch_size, model->dimension);
+    free2D(dW2, model->vocab_size, model->dimension);
+    free2D(db1, model->dimension, 1);
+    free2D(db2, model->vocab_size, 1);
+    free2D(alpha_dW1, model->dimension, model->vocab_size);
+    free2D(alpha_dW2, model->vocab_size, model->dimension);
+    free2D(alpha_db1, model->dimension, 1);
+    free2D(alpha_db2, model->vocab_size, 1);
 }
 
 void gradientDescent(EMBEDDING* model)
