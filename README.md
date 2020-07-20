@@ -63,7 +63,7 @@ double** vector = getVector(model, word);
 
 Similary, to obtain the word most similar to a vector, use
 ```
-char* word = getWord(model, vetor);
+char* word = getWord(model, vector);
 ```
 
 More support coming soon!
