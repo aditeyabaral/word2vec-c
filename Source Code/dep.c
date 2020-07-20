@@ -218,6 +218,7 @@ void destroyModel(EMBEDDING* model)
         free2D(model->hashtable[i]->wordvector, 1, model->dimension);
         free2D_int(model->hashtable[i]->onehotvector, 1, model->vocab_size);
         free(model->hashtable[i]->word);
+        free(model->hashtable[i]);
     }
     free(model->hashtable);
 
