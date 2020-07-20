@@ -183,11 +183,6 @@ int** createOneHot(NODE* node, EMBEDDING* model)
         index = (index+1)%model->vocab_size;
     }
     int** oneHotVector = (int**)malloc(sizeof(int*));
-    if(oneHotVector == NULL)
-    {
-        printf("Failed to allocate memory for one hot vector!\n");
-        return NULL;
-    }
     oneHotVector[0] = (int*)malloc(sizeof(int)*model->vocab_size);
     for(int i=0; i < model->vocab_size; i++)
         oneHotVector[0][i] = 0;
@@ -257,7 +252,7 @@ double** getX(EMBEDDING* model, int m, char* s)
         for(int j = 0; j<model->vocab_size; j++)
             X[j][col] = example[0][j];
         col++;
-        free(example);
+        free2D(example, 1, model->vocab_size);
         token1 = strtok_r(NULL, "\n", &save1);
     }
     return X;

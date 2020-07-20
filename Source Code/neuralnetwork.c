@@ -74,16 +74,24 @@ void back_propagation(EMBEDDING* model)
     double** db2 = multiply_scalar(db2_partial_product, ratio, model->vocab_size, 1);
 
     double** alpha_dW1 = multiply_scalar(dW1, model->alpha, model->dimension, model->vocab_size);
-    model->W1 = subtract(model->W1, alpha_dW1, model->dimension, model->vocab_size);
+    double** W1_diff_alpha_dW1 = subtract(model->W1, alpha_dW1, model->dimension, model->vocab_size);
+    free2D(model->W1, model->dimension, model->vocab_size);
+    model->W1 = W1_diff_alpha_dW1;
 
     double** alpha_dW2 = multiply_scalar(dW2, model->alpha, model->vocab_size, model->dimension);
-    model->W2 = subtract(model->W2, alpha_dW2, model->vocab_size, model->dimension);
+    double** W2_diff_alpha_dW2 = subtract(model->W2, alpha_dW2, model->vocab_size, model->dimension);
+    free2D(model->W2, model->vocab_size, model->dimension);
+    model->W2 = W2_diff_alpha_dW2;
 
     double** alpha_db1 = multiply_scalar(db1, model->alpha, model->dimension, 1);
-    model->b1 = subtract(model->b1, alpha_db1, model->dimension, 1);
+    double** b1_diff_alpha_db1 = subtract(model->b1, alpha_db1, model->dimension, 1);
+    free2D(model->b1, model->dimension, 1);
+    model->b1 = b1_diff_alpha_db1;
 
     double** alpha_db2 = multiply_scalar(db2, model->alpha, model->vocab_size, 1);
-    model->b2 = subtract(model->b2, alpha_db2, model->vocab_size, 1);
+    double** b2_diff_alpha_db2 = subtract(model->b2, alpha_db2, model->vocab_size, 1);
+    free2D(model->b2, model->vocab_size, 1);
+    model->b2 = b2_diff_alpha_db2;
 
     #if 0
     printf("dW1: \n");
@@ -139,7 +147,7 @@ void gradientDescent(EMBEDDING* model)
     {
         forward_propagation(model);
         loss = cost(model);
-        printf("Epoch: %d Loss: %lf\n", i, loss);
+        printf("Epoch: %d Loss: %lf\n", i+1, loss);
         back_propagation(model);
     }
     printf("Training completed.\n\n");

@@ -28,8 +28,8 @@ char* remove_punctuations(char *sent)
 
 char* trim(char* word)
 {
-    char* s = (char*)malloc(sizeof(char)*INT_MAX);
     int len = strlen(word);
+    char* s = (char*)malloc(sizeof(char)*len);
     int pos1 = 0, pos2 = len-1, ctr = 0;
     while(word[pos1]==' ')
         pos1++;

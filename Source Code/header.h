@@ -181,3 +181,7 @@ FUNCTIONALITIES
 
 double similarity(EMBEDDING* model, char* word1, char* word2);
 double** getWordVector(EMBEDDING* model, char* word);
+double cosine_similarity(double** v1, double** v2, int N);
+double distance(EMBEDDING* model, char* word1, char* word2);
+double** getVector(EMBEDDING* model, char* word);
+char* getWord(EMBEDDING* model, double** vector);

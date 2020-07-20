@@ -7,15 +7,15 @@ double cosine_similarity(double** v1, double** v2, int N)
 
 double similarity(EMBEDDING* model, char* word1, char* word2)
 {
-    double** v1 = getWordVector(model, word1);
-    double** v2 = getWordVector(model, word2);
+    double** v1 = getVector(model, word1);
+    double** v2 = getVector(model, word2);
     return cosine_similarity(v1, v2, model->dimension);
 }
 
 double distance(EMBEDDING* model, char* word1, char* word2)
 {
-    double** v1 = getWordVector(model, word1);
-    double** v2 = getWordVector(model, word2);
+    double** v1 = getVector(model, word1);
+    double** v2 = getVector(model, word2);
     return 1.0-cosine_similarity(v1, v2, model->dimension);
 }
 
@@ -44,7 +44,9 @@ char* getWord(EMBEDDING* model, double** vector)
         if (sim > max_sim)
         {
             max_sim = sim;
-
+            memset(word, '\0', 50);
+            strcpy(word, model->hashtable[i]->word);
         }
     }
+    return word;
 }
