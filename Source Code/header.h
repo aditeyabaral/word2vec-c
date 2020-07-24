@@ -194,15 +194,15 @@ FUNCTIONALITIES
 double similarity(EMBEDDING* model, char* word1, char* word2);
 /* Return the cosine of the angle between vectors v1 and v2 */
 double cosine_similarity(double** v1, double** v2, int N);
-/* 1-cosine_similarity(v1, v2) */
+/* Return the cosine distance (1-cosine similarity) between vectors v1 and v2 */
 double cosine_distance(double** v1, double** v2, int N);
-/* Calculate the distance between the embeddings of 2 words */
+/* Calculate the cosine distance between the embeddings of 2 words */
 double distance(EMBEDDING* model, char* word1, char* word2);
 /* Retrieve the embedding of a particular word */
 double** getVector(EMBEDDING* model, char* word);
 /* Get the word with the highest similarity to a given embedding */
 char* getWord(EMBEDDING* model, double** vector);
-/* Get the k most similar words to a given embedding */
+/* Get the k most similar words to a given embedding. Returns a single string of words separated by \n */
 char* mostSimilarByVector(EMBEDDING* model, double** vector, int k);
-/* Get the k most similar words to a given word */
+/* Get the k most similar words to a given word. Returns a single string of words separated by \n */
 char* mostSimilarByWord(EMBEDDING* model, char* word, int k);
