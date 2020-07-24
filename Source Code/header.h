@@ -83,6 +83,11 @@ void saveModel(EMBEDDING* model, bool write_all);
 EMBEDDING* loadModel(char* embedding_file);
 /* Create vocabulary from corpus, initialize hyperparameters and start the training loop */
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose);
+
+/*
+MEMORY MANAGEMENT FUNCTIONS
+*/
+
 /*Free storage held by an arbitrary 2D array of doubles of size m * n */
 void free2D(double** M, int m, int n);
 /*Free storage held by an arbitrary 2D array of ints of size m * n */
@@ -144,7 +149,9 @@ double** broadcast_and_add(double** WX, double **b, int m1, int n1, int m2, int 
 double** getX(EMBEDDING* model, int m, char* s);
 /* Get matrix Y from matrix of target words */
 double** getY(EMBEDDING* model, int m, char* s);
+/* The dot product of vectors v1 and v2, of length n */
 double dot(double** v1, double** v2, int n);
+/* L2 Norm or Euclidean norm of the matrix M of size m x n */
 double norm(double** M, int m, int n);
 
 /*
@@ -160,7 +167,6 @@ void back_propagation(EMBEDDING* model);
 /* A single forward pass, followed by a backward pass and the parameter update step */
 void gradientDescent(EMBEDDING* model, bool save);
 
-
 /*
 TEXT PREPROCESSING FUNCTIONS
 */
@@ -172,16 +178,19 @@ char* trim(char*);
 /* Get the number of words in the vocabulary from the corpus */
 int getVocabularySize(EMBEDDING*);
 
-
-
-
 /*
 FUNCTIONALITIES
 */
 
+/* Returns the cosine similarity between 2 words */
 double similarity(EMBEDDING* model, char* word1, char* word2);
+/* Return the cosine of the angle between vectors v1 and v2 */
 double cosine_similarity(double** v1, double** v2, int N);
+/* 1-cosine_similarity(v1, v2) */
 double cosine_distance(double** v1, double** v2, int N);
+/* Calculate the distance between the embeddings of 2 words */
 double distance(EMBEDDING* model, char* word1, char* word2);
+/* Retrieve the embedding of a particular word */
 double** getVector(EMBEDDING* model, char* word);
+/* Get the word with the highest similarity to a given embedding */
 char* getWord(EMBEDDING* model, double** vector);
