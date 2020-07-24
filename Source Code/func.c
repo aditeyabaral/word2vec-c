@@ -76,3 +76,19 @@ char* get_top_k_by_vector(EMBEDDING* model, double** vector, int k)
     free(temp);
     return top_k_words;
 }
+
+char* get_top_k_by_word(EMBEDDING* model, char* word, int k)
+{
+    double** word_vector = getVector(model, word);
+    if(word_vector == NULL)
+    {
+        printf("%s not in vocabulary!\n", word);
+        return NULL;
+    }
+    else
+    {
+        char* top_k_words = get_top_k_by_vector(model, word_vector, k);
+        free2D(word_vector, 1, model->dimension);
+        return top_k_words;
+    }
+}
