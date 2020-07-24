@@ -87,7 +87,7 @@ char* mostSimilarByWord(EMBEDDING* model, char* word, int k)
     }
     else
     {
-        char* top_k_words = get_top_k_by_vector(model, word_vector, k);
+        char* top_k_words = mostSimilarByVector(model, word_vector, k);
         free2D(word_vector, 1, model->dimension);
         return top_k_words;
     }
