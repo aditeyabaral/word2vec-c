@@ -139,6 +139,10 @@ double** createArray(int m, int n, int random_state);
 double** createZerosArray(int m, int n);
 /* Create matrix of size m x n and populate it with 1 */
 double** createOnesArray(int m, int n);
+/* Return the cosine of the angle between vectors v1 and v2 */
+double cosine_similarity(double** v1, double** v2, int N);
+/* Return the cosine distance (1-cosine similarity) between vectors v1 and v2 */
+double cosine_distance(double** v1, double** v2, int N);
 /* Multiply matrices M1 and M2 */
 double** multiply(double **M1, double **M2, int m1, int n1, int m2, int n2);
 /* Add matrices M1 and M2 */
@@ -192,10 +196,6 @@ FUNCTIONALITIES
 
 /* Returns the cosine similarity between 2 words */
 double similarity(EMBEDDING* model, char* word1, char* word2);
-/* Return the cosine of the angle between vectors v1 and v2 */
-double cosine_similarity(double** v1, double** v2, int N);
-/* Return the cosine distance (1-cosine similarity) between vectors v1 and v2 */
-double cosine_distance(double** v1, double** v2, int N);
 /* Calculate the cosine distance between the embeddings of 2 words */
 double distance(EMBEDDING* model, char* word1, char* word2);
 /* Retrieve the embedding of a particular word */

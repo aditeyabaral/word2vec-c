@@ -61,6 +61,8 @@ To obtain a set of K words most similar to a given vector (in decreasing order o
 char* similar_words = mostSimilarByVector(model, word, k);
 ```
 
+To support other functionalities like vector operations between embeddings, miscellaneous matrix operations have been added as well. More information about them can be found under Matrix Utilities in the header file.
+
 ## Coming Soon
 
 * loading model from file
