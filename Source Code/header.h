@@ -203,6 +203,6 @@ double** getVector(EMBEDDING* model, char* word);
 /* Get the word with the highest similarity to a given embedding */
 char* getWord(EMBEDDING* model, double** vector);
 /* Get the k most similar words to a given embedding */
-char* get_top_k_by_vector(EMBEDDING* model, double** vector, int k);
+char* mostSimilarByVector(EMBEDDING* model, double** vector, int k);
 /* Get the k most similar words to a given word */
-char* get_top_k_by_word(EMBEDDING* model, char* word, int k);
+char* mostSimilarByWord(EMBEDDING* model, char* word, int k);

@@ -31,7 +31,7 @@ char* getWord(EMBEDDING* model, double** vector)
     return word;
 }
 
-char* get_top_k_by_vector(EMBEDDING* model, double** vector, int k)
+char* mostSimilarByVector(EMBEDDING* model, double** vector, int k)
 {
     SIM_INFO* sims = (SIM_INFO*)malloc(sizeof(SIM_INFO)*model->vocab_size);
     for(int i=0; i<model->vocab_size; ++i)
@@ -77,7 +77,7 @@ char* get_top_k_by_vector(EMBEDDING* model, double** vector, int k)
     return top_k_words;
 }
 
-char* get_top_k_by_word(EMBEDDING* model, char* word, int k)
+char* mostSimilarByWord(EMBEDDING* model, char* word, int k)
 {
     double** word_vector = getVector(model, word);
     if(word_vector == NULL)
