@@ -52,6 +52,14 @@ typedef struct embedding
     NODE **hashtable;
 }EMBEDDING;
 
+/* Structure for holding similarity info of a word relative to a specific word */
+typedef struct similarity_info
+{
+    char* word;
+    double sim;
+}SIM_INFO;
+
+
 /*
 MODEL CREATION AND INITIALIZATION FUNCTIONS
 */
@@ -194,3 +202,5 @@ double distance(EMBEDDING* model, char* word1, char* word2);
 double** getVector(EMBEDDING* model, char* word);
 /* Get the word with the highest similarity to a given embedding */
 char* getWord(EMBEDDING* model, double** vector);
+/* Get the k most similar words to a given embedding */
+char* get_top_k_by_vector(EMBEDDING* model, double** vector, int k)

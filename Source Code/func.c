@@ -30,3 +30,49 @@ char* getWord(EMBEDDING* model, double** vector)
     }
     return word;
 }
+
+char* get_top_k_by_vector(EMBEDDING* model, double** vector, int k)
+{
+    SIM_INFO* sims = (SIM_INFO*)malloc(sizeof(SIM_INFO)*model->vocab_size);
+    for(int i=0; i<model->vocab_size; ++i)
+    {
+        sims[i].word = (char*)malloc(sizeof(char)*50);
+        strcpy(sims[i].word, model->hashtable[i]->word);
+        sims[i].sim = cosine_similarity(model->hashtable[i]->wordvector, vector, model->dimension);
+    }
+    char* temp = (char*)malloc(sizeof(char)*50);
+    double s;
+
+    char* top_k_words = (char*)malloc(sizeof(char)*k*50);
+    strcpy(top_k_words, "");
+    for(int i=0; i<k; ++i)
+    {
+        for(int j=0; j<model->vocab_size; ++j)
+        {
+            if(sims[j].sim > sims[j+1].sim)
+            {
+                strcpy(temp, sims[j].word);
+                strcpy(sims[j].word, sims[j+1].word);
+                strcpy(sims[j+1].word, temp);
+
+                s = sims[j].sim;
+                sims[j].sim = sims[j+1].sim;
+                sims[j+1].sim = s;
+            }
+        }
+    }
+
+    for(int t = model->vocab_size - k -1; t < model->vocab_size; ++t)
+    {
+        strcat(top_k_words, sims[t].word);
+        strcat(top_k_words, "\n");
+    }
+
+    for(int i=0; i<model->vocab_size; ++i)
+    {
+        free(sims[i].word);
+    }
+    free(sims);
+    free(temp);
+    return top_k_words;
+}
