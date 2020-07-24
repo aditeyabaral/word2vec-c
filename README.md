@@ -11,7 +11,7 @@ Note - All changes will also be pushed to [NLPC](https://github.com/aditeyabaral
 
 ## Compilation
 
-To make compilation easy, a simple shell scrip has been included. Run the following commands:<br>
+To make compilation easy, a simple shell script has been included. Run the following commands:<br>
 ```
 $ chmod +x compile.sh
 $ ./compile.sh
