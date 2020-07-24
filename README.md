@@ -31,31 +31,32 @@ $ ./a.out < path_to_corpus
 
 ## Supported Functionalities
 
+### Cosine Similarity 
 To find the cosine similarity between two words, use
 ```
 double sim = similarity(model, word1, word2);
 ```
-
+### Cosine Distance
 To find the cosine distance between two words, use 
 ```
 double dist = distance(model, word1, word2);
 ```
-
+### Extract Embeddings 
 To find a word's embedding, use
 ```
 double** vector = getVector(model, word);
 ```
-
+### Most Similar Word by Vector 
 To obtain the word most similar to a vector, use
 ```
 char* word = getWord(model, vector);
 ```
-
+### K Most Similar Words by Word 
 To obtain a set of K words most similar to a given word (in decreasing order of similarity), use
 ```
 char* similar_words = mostSimilarByWord(model, word, k);
 ```
-
+### K Most Similar Words by Word
 To obtain a set of K words most similar to a given vector (in decreasing order of similarity), use
 ```
 char* similar_words = mostSimilarByVector(model, word, k);
