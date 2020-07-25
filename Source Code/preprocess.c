@@ -31,9 +31,9 @@ char* trim(char* word)
     int len = strlen(word);
     char* s = (char*)malloc(sizeof(char)*len);
     int pos1 = 0, pos2 = len-1, ctr = 0;
-    while(word[pos1]==' ')
+    while(word[pos1]==' ' || word[pos1]=='\t' || word[pos1]=='\n')
         pos1++;
-    while(word[pos2]==' ')
+    while(word[pos2]==' '|| word[pos2]=='\t' || word[pos2]=='\n')
         pos2--;
     while(pos1<=pos2)
     {

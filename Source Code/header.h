@@ -88,9 +88,11 @@ void writeWeightsBiases(EMBEDDING* model);
 /* Call writeEmbeddings, writeParameters and writeCorpus */
 void saveModel(EMBEDDING* model, bool write_all);
 /* TBD */
-EMBEDDING* loadModel(char* embedding_file);
+EMBEDDING* loadModelEmbeddings(char* embedding_filename);
+void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename);
+EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename);
 /* Create vocabulary from corpus, initialize hyperparameters and start the training loop */
-void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool verbose);
+void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool save);
 
 /*
 MEMORY MANAGEMENT FUNCTIONS

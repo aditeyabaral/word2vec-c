@@ -150,7 +150,10 @@ void gradientDescent(EMBEDDING* model, bool save)
         printf("Epoch: %d Loss: %lf\n", i+1, loss);
         back_propagation(model);
         if(save == true && i%100 == 0)
+        {
+            extractEmbeddings(model);
             writeEmbeddings(model);
+        }
     }
     printf("Training completed.\n\n");
 }
