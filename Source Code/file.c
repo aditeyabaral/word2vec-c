@@ -81,9 +81,11 @@ void saveModel(EMBEDDING* model, bool write_all)
 }
 
 
-EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename)
+EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename)
 {
     EMBEDDING* model = createModel();
+    getFileDimensions(model, embedding_filename);
+    getEmbeddingParametersFromFile(model, embedding_filename);
     //todo
     return model;
 }

@@ -90,7 +90,8 @@ void saveModel(EMBEDDING* model, bool write_all);
 /* TBD */
 EMBEDDING* loadModelEmbeddings(char* embedding_filename);
 void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename);
-EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename);
+void getFileDimensions(EMBEDDING* model, char* filename);
+EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
 /* Create vocabulary from corpus, initialize hyperparameters and start the training loop */
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool save);
 
