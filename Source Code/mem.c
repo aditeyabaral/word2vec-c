@@ -2,6 +2,9 @@
 
 void free2D(double** M, int m, int n)
 {
+    if (M == NULL)
+        return;
+
     for(int i=0;i<m;++i)
         free(M[i]);
     free(M);
@@ -9,6 +12,9 @@ void free2D(double** M, int m, int n)
 
 void free2D_int(int** M, int m, int n)
 {
+    if (M == NULL)
+        return;
+
     for(int i=0;i<m;++i)
         free(M[i]);
     free(M);

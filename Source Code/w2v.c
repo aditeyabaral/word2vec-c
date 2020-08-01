@@ -2,16 +2,20 @@
 
 int main()
 {
-    #if 0
+    bool train = false;
+    #if train
     char *s = (char*)malloc(sizeof(char)*INT_MAX);
     scanf("%[^\\0]s", s);
     EMBEDDING* model = createModel();
     train(model, s, 3, 300, 5, 10, 1, true);
     saveModel(model, false);
+    destroyModel(model);
     free(s);
     #endif
 
+    #if !train
     EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
-    //destroyModel(model);
-    return 0;   
+    destroyModel(model);
+    #endif
+    return 0;  
 }

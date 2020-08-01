@@ -21,7 +21,6 @@ void insert(NODE* node, EMBEDDING* model)
         if(!strcmp(model->hashtable[index]->word, node->word))
             return;
         index = (index+1)%model->vocab_size;
-        
     }
     model->hashtable[index] = node;
 }

@@ -88,22 +88,67 @@ EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char
     return model;
 }
 
-void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename)
+void getFileDimensions(EMBEDDING* model, char* filename)
 {
     FILE* fp = fopen(filename, "r");
-    char* tmp = (char*)malloc(sizeof(char)*INT_MAX);
+    char* temp = (char*)malloc(sizeof(char)*INT_MAX);
     char *line, *token, *save;
-    int vocab_size = 0, dimension = 0, len;
-    fscanf(fp, "%[^EOF]s", tmp);
-    char* cleaned = trim(tmp);
-    //printf("%s\n", cleaned);
-    token = strtok_r(cleaned, "\n", &save);
-    while(token!=NULL)
+    int vocab_size = 0, dimension = 0;
+    bool flag = false;
+    while(fgets(temp, INT_MAX, fp))
     {
+        line = trim(temp);
         vocab_size++;
-        token = strtok_r(NULL, "\n", &save);
-    }   
-    printf("%d\n", vocab_size);
+        token = strtok_r(line, ",", &save);
+        token = strtok_r(NULL, ",", &save);
+        while(token!=NULL && !flag)
+        {
+            dimension++;
+            token = strtok_r(NULL, ",", &save);
+        }
+        flag = true;
+        free(line);
+    }
+    free(temp);
+    fclose(fp);
+    model->vocab_size = vocab_size;
+    model->dimension = dimension;
+}
+
+void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename)
+{
+    initialiseModelHashtable(model);
+    FILE* fp = fopen(filename, "r");
+    char* temp = (char*)malloc(sizeof(char)*INT_MAX);
+    char *line, *token, *save, *ptr;
+    char word[50];
+    int pos = 0, dim = 0;
+    while(fgets(temp, INT_MAX, fp))
+    {
+        line = trim(temp);
+        token = strtok_r(line, ",", &save);
+        strcpy(word, token);
+
+        NODE* node = (NODE*)malloc(sizeof(NODE));
+        node->word = (char*)malloc(sizeof(char)*strlen(word));
+        strcpy(node->word, word);
+
+        node->onehotvector = createOneHot(node, model);
+        insert(node, model);
+
+        node->wordvector = createZerosArray(1, model->dimension);
+        token = strtok_r(NULL, ",", &save);
+        dim = 0;
+        while(token!=NULL)
+        {
+            double val = strtod(token, &ptr);
+            node->wordvector[0][dim] = val;
+            dim++;
+            token = strtok_r(NULL, ",", &save);
+        }
+        free(line);
+    }
+    free(temp);
 }
 
 EMBEDDING* loadModelEmbeddings(char* embedding_filename)
@@ -117,31 +162,7 @@ EMBEDDING* loadModelEmbeddings(char* embedding_filename)
     fclose(fp);
 
     EMBEDDING* model = createModel();
+    getFileDimensions(model, embedding_filename);
     getEmbeddingParametersFromFile(model, embedding_filename);
-
-    
-    #if 0
-    rewind(fp);
-    int vocab_size = 0;
-    char* token, *save;
-    char word[50];    
-
-    while(fgets(tmp, INT_MAX, fp))
-    {
-        line = trim(tmp);
-        vocab_size++;
-        token = strtok_r(line, ",", &save);
-        strcpy(word, token);
-
-        NODE* node = (NODE*)malloc(sizeof(NODE));
-        node->word = (char*)malloc(sizeof(char)*strlen(word));
-        strcpy(node->word, word);
-        node->wordvector = NULL;
-        //node->onehotvector = createOneHot(node, model);
-        //insert(node, model);
-
-    }
-    free(line);
-    #endif
     return model;
 }
