@@ -80,9 +80,68 @@ void saveModel(EMBEDDING* model, bool write_all)
         writeCorpus(model);
 }
 
-EMBEDDING* loadModel(char* embedding_filename)
+
+EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename)
 {
     EMBEDDING* model = createModel();
     //todo
+    return model;
+}
+
+void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename)
+{
+    FILE* fp = fopen(filename, "r");
+    char* tmp = (char*)malloc(sizeof(char)*INT_MAX);
+    char *line, *token, *save;
+    int vocab_size = 0, dimension = 0, len;
+    fscanf(fp, "%[^EOF]s", tmp);
+    char* cleaned = trim(tmp);
+    //printf("%s\n", cleaned);
+    token = strtok_r(cleaned, "\n", &save);
+    while(token!=NULL)
+    {
+        vocab_size++;
+        token = strtok_r(NULL, "\n", &save);
+    }   
+    printf("%d\n", vocab_size);
+}
+
+EMBEDDING* loadModelEmbeddings(char* embedding_filename)
+{
+    FILE* fp = fopen(embedding_filename, "r");
+    if (fp == NULL)
+    {
+        printf("No file found.\n");
+        return NULL;
+    }
+    fclose(fp);
+
+    EMBEDDING* model = createModel();
+    getEmbeddingParametersFromFile(model, embedding_filename);
+
+    
+    #if 0
+    rewind(fp);
+    int vocab_size = 0;
+    char* token, *save;
+    char word[50];    
+
+    while(fgets(tmp, INT_MAX, fp))
+    {
+        line = trim(tmp);
+        vocab_size++;
+        token = strtok_r(line, ",", &save);
+        strcpy(word, token);
+
+        NODE* node = (NODE*)malloc(sizeof(NODE));
+        node->word = (char*)malloc(sizeof(char)*strlen(word));
+        strcpy(node->word, word);
+        node->wordvector = NULL;
+        //node->onehotvector = createOneHot(node, model);
+        //insert(node, model);
+
+    }
+    free(line);
+    #endif
     return model;
 }
