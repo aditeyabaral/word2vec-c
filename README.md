@@ -69,7 +69,7 @@ saveModel(model, true);
 ```
 
 ### Load Model from Embeddings
-To load a model, ensure that the embedding CSV file contains data in the following format - 
+To load a model's embeddings, ensure that the embedding CSV file contains data in the following format
 
 | word1 | embedding1 | embedding2 | ... | embeddingN |
 |-------|------------|------------|-----|------------|
@@ -82,8 +82,19 @@ Load the model using
 EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
 ```
 
+Note that this function will allow you to only use the embeddings and their associated functions. It does not support further training of the model. 
+
+### Load Model from Weights, Biases, X and y
+To load a model for further training and usage, use 
+
+```sh
+EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", "model-W1.csv", "model-W2.csv", "model-b1.csv", "model-b2.csv");
+```
+The first argument - the embeddings file can be left NULL. 
+
+
 To support other functionalities like vector operations between embeddings, miscellaneous matrix operations have been added as well. More information about them can be found under Matrix Utilities in the header file.
 
 ## Coming Soon
 
-* loading model from file - support load and train
+* Fixing memory leaks
