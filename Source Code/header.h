@@ -59,7 +59,6 @@ typedef struct similarity_info
     double sim;
 }SIM_INFO;
 
-
 /*
 MODEL CREATION AND INITIALIZATION FUNCTIONS
 */
@@ -67,7 +66,7 @@ MODEL CREATION AND INITIALIZATION FUNCTIONS
 /* Initialize the hyperparameters of the model
 (context width, output dimension, learning rate and number of epochs) */
 void initialiseModelParameters(EMBEDDING* model, int C, int N, float alpha, int epochs);
-/* Allocate memory to store the model corpus and clean it*/
+/* Allocate memory to store the cleaned model corpus */
 void initialiseModelCorpus(EMBEDDING* model, char* corpus);
 /* Allocate memory for hashtable */
 void initialiseModelHashtable(EMBEDDING*);
@@ -77,34 +76,8 @@ void createXandY(EMBEDDING* model, int random_state);
 EMBEDDING* createModel();
 /* Get final word embeddings from the trained model */
 void extractEmbeddings(EMBEDDING* model);
-/* Write word and its embedding to a CSV file called model-embeddings.csv */
-void writeEmbeddings(EMBEDDING* model);
-/* Write all hyperparameter values to model-parameters.csv */
-void writeParameters(EMBEDDING* model);
-/* Write clean and original corpus along with the vocabulary to model-corpus.txt */
-void writeCorpus(EMBEDDING* model);
-/* Write weights and biases of the NN model to model-weights-wi.csv and model-biases-bi.csv where i = 1, 2 */
-void writeWeightsBiases(EMBEDDING* model);
-/* Call writeEmbeddings, writeParameters and writeCorpus */
-void saveModel(EMBEDDING* model, bool write_all);
-/* TBD */
-EMBEDDING* loadModelEmbeddings(char* embedding_filename);
-void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename);
-void getFileDimensions(EMBEDDING* model, char* filename);
-EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
 /* Create vocabulary from corpus, initialize hyperparameters and start the training loop */
 void train(EMBEDDING* model, char* corpus, int C, int N, float alpha, int epochs, int random_state, bool save);
-
-/*
-MEMORY MANAGEMENT FUNCTIONS
-*/
-
-/*Free storage held by an arbitrary 2D array of doubles of size m * n */
-void free2D(double** M, int m, int n);
-/*Free storage held by an arbitrary 2D array of ints of size m * n */
-void free2D_int(int** M, int m, int n);
-/* Free all storage allocated for model object */
-void destroyModel(EMBEDDING* model);
 
 /*
 DISPLAY FUNCTIONS
@@ -116,6 +89,40 @@ void displayArray(double** a, int m, int n);
 void displayHashtable(EMBEDDING*);
 /* Display all the hyperparameter values and weights of the model */
 void displayModel(EMBEDDING* model);
+
+/*
+FUNCTIONS TO LOAD AND STORE MODEL IN FILE 
+*/
+
+/* Write word and its embedding to a CSV file called model-embeddings.csv */
+void writeEmbeddings(EMBEDDING* model);
+/* Write all hyperparameter values to model-parameters.csv */
+void writeParameters(EMBEDDING* model);
+/* Write clean and original corpus along with the vocabulary to model-corpus.txt */
+void writeCorpus(EMBEDDING* model);
+/* Write weights and biases of the NN model to model-weights-wi.csv and model-biases-bi.csv where i = 1, 2 */
+void writeWeightsBiases(EMBEDDING* model);
+/* Call writeEmbeddings, writeParameters and writeCorpus */
+void saveModel(EMBEDDING* model, bool write_all);
+/* TBD */
+EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
+/* Load vocabulary size and embedding dimension from file */
+void getFileDimensions(EMBEDDING* model, char* filename);
+/* Create hash table from text file containing the vocabulary */
+void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename);
+/* Load model from file */
+EMBEDDING* loadModelEmbeddings(char* embedding_filename);
+
+/*
+MEMORY MANAGEMENT FUNCTIONS
+*/
+
+/*Free storage held by an arbitrary 2D array of doubles of size m * n */
+void free2D(double** M, int m, int n);
+/*Free storage held by an arbitrary 2D array of ints of size m * n */
+void free2D_int(int** M, int m, int n);
+/* Free all storage allocated for model object */
+void destroyModel(EMBEDDING* model);
 
 /*
 HASH TABLE FUNCTIONS 
@@ -168,6 +175,10 @@ double** getY(EMBEDDING* model, int m, char* s);
 double dot(double** v1, double** v2, int n);
 /* L2 Norm or Euclidean norm of the matrix M of size m x n */
 double norm(double** M, int m, int n);
+/* Returns the cosine similarity between 2 words */
+double similarity(EMBEDDING* model, char* word1, char* word2);
+/* Calculate the cosine distance between the embeddings of 2 words */
+double distance(EMBEDDING* model, char* word1, char* word2);
 
 /*
 NEURAL NETWORK FUNCTIONS
@@ -194,13 +205,9 @@ char* trim(char*);
 int getVocabularySize(EMBEDDING*);
 
 /*
-FUNCTIONALITIES
+WORD2VEC FUNCTIONALITIES
 */
 
-/* Returns the cosine similarity between 2 words */
-double similarity(EMBEDDING* model, char* word1, char* word2);
-/* Calculate the cosine distance between the embeddings of 2 words */
-double distance(EMBEDDING* model, char* word1, char* word2);
 /* Retrieve the embedding of a particular word */
 double** getVector(EMBEDDING* model, char* word);
 /* Get the word with the highest similarity to a given embedding */
