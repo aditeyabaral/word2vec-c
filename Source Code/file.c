@@ -1,5 +1,74 @@
 #include "header.h"
 
+bool checkFileExists(char* filename)
+{
+    if (filename == NULL)
+        return false;
+    FILE* fp = fopen(filename, "r");
+    bool check = true;
+    if (fp == NULL)
+    {
+        printf("%s not found.\n", filename);
+        check = false;
+    }
+    fclose(fp);
+    return check;
+}
+
+void getFileDimensions(char* filename, int *m, int *n)
+{
+    FILE* fp = fopen(filename, "r");
+    char* temp = (char*)malloc(sizeof(char)*INT_MAX);
+    char *line, *token, *save;
+    *m = 0;
+    *n = 0;
+    bool flag = false;
+    while(fgets(temp, INT_MAX, fp))
+    {
+        line = trim(temp);
+        *m = *m + 1;
+        token = strtok_r(line, ",", &save);
+        while(token!=NULL && !flag)
+        {
+            *n = *n + 1;
+            token = strtok_r(NULL, ",", &save);
+        }
+        flag = true;
+        free(line);
+    }
+    free(temp);
+    fclose(fp);
+}
+
+double** getMatrixFromFile(EMBEDDING* model, char* filename)
+{
+    int m, n, row, col;
+    getFileDimensions(filename, &m, &n);
+    double** M = createZerosArray(m, n);
+
+    FILE* fp = fopen(filename, "r");
+    char* temp = (char*)malloc(sizeof(char)*INT_MAX);
+    char *line, *token, *save, *ptr;
+    row = 0;
+    while(fgets(temp, INT_MAX, fp))
+    {
+        line = trim(temp);
+        token = strtok_r(line, ",", &save);
+        col = 0;
+        while(token!=NULL)
+        {
+            M[row][col] = strtod(token, &ptr);
+            col++;
+            token = strtok_r(NULL, ",", &save);
+        }
+        row++;
+        free(line);
+    }
+    free(temp);
+    fclose(fp);
+    return M;
+}
+
 void writeEmbeddings(EMBEDDING* model)
 {
     FILE* fp  = fopen("model-embeddings.csv", "w");
@@ -36,6 +105,28 @@ void writeCorpus(EMBEDDING* model)
     fprintf(fp, "Corpus,%s,\n\n", model->corpus);
     fclose(fp);
     printf("Corpus saved...\n");
+}
+
+void writeXY(EMBEDDING* model)
+{
+    FILE* fp  = fopen("model-X.csv", "w");
+    for(int i = 0; i<model->vocab_size; i++)
+    {
+        for(int j = 0; j<model->batch_size; j++)
+            fprintf(fp, "%lf,", model->X[i][j]);
+        fprintf(fp, "%c", '\n');
+    }
+
+    FILE* fp  = fopen("model-y.csv", "w");
+    for(int i = 0; i<model->vocab_size; i++)
+    {
+        for(int j = 0; j<model->batch_size; j++)
+            fprintf(fp, "%lf,", model->Y[i][j]);
+        fprintf(fp, "%c", '\n');
+    }
+
+    fclose(fp);
+    printf("X and y saved...\n");
 }
 
 void writeWeightsBiases(EMBEDDING* model)
@@ -83,39 +174,35 @@ void saveModel(EMBEDDING* model, bool write_all)
 
 EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename)
 {
+    if(!(checkFileExists(X_filename) && checkFileExists(Y_filename) && checkFileExists(W1_filename) 
+        && checkFileExists(W2_filename) && checkFileExists(b1_filename) && checkFileExists(b2_filename)))
+    {
+        printf("Essential file(s) missing. Aborting...\n");
+        return NULL;
+    }
+
     EMBEDDING* model = createModel();
-    getFileDimensions(model, embedding_filename);
-    getEmbeddingParametersFromFile(model, embedding_filename);
-    //todo
+    int m, n;
+    if (checkFileExists(embedding_filename))
+    {
+        getFileDimensions(embedding_filename, &m, &n);
+        model->vocab_size = m;
+        model->dimension = n-1;
+        getEmbeddingParametersFromFile(model, embedding_filename);
+    }
+
+    getFileDimensions(X_filename, &m, &n);
+    model->batch_size = m;
+
+    model->X = getMatrixFromFile(model, X_filename);
+    model->Y = getMatrixFromFile(model, Y_filename);
+    model->W1 = getMatrixFromFile(model, W1_filename);
+    model->W2 = getMatrixFromFile(model, W2_filename);
+    model->b1 = getMatrixFromFile(model, b1_filename);
+    model->b2 = getMatrixFromFile(model, b2_filename);
     return model;
 }
 
-void getFileDimensions(EMBEDDING* model, char* filename)
-{
-    FILE* fp = fopen(filename, "r");
-    char* temp = (char*)malloc(sizeof(char)*INT_MAX);
-    char *line, *token, *save;
-    int vocab_size = 0, dimension = 0;
-    bool flag = false;
-    while(fgets(temp, INT_MAX, fp))
-    {
-        line = trim(temp);
-        vocab_size++;
-        token = strtok_r(line, ",", &save);
-        token = strtok_r(NULL, ",", &save);
-        while(token!=NULL && !flag)
-        {
-            dimension++;
-            token = strtok_r(NULL, ",", &save);
-        }
-        flag = true;
-        free(line);
-    }
-    free(temp);
-    fclose(fp);
-    model->vocab_size = vocab_size;
-    model->dimension = dimension;
-}
 
 void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename)
 {
@@ -155,16 +242,16 @@ void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename)
 
 EMBEDDING* loadModelEmbeddings(char* embedding_filename)
 {
-    FILE* fp = fopen(embedding_filename, "r");
-    if (fp == NULL)
+    if(!checkFileExists(embedding_filename))
     {
-        printf("No file found.\n");
+        printf("File missing. Aborting...\n");
         return NULL;
     }
-    fclose(fp);
-
     EMBEDDING* model = createModel();
-    getFileDimensions(model, embedding_filename);
+    int m, n;
+    getFileDimensions(embedding_filename, &m, &n);
+    model->vocab_size = m;
+    model->dimension = n-1;
     getEmbeddingParametersFromFile(model, embedding_filename);
     return model;
 }

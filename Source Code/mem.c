@@ -22,6 +22,9 @@ void free2D_int(int** M, int m, int n)
 
 void destroyModel(EMBEDDING* model)
 {
+    if(model == NULL)
+        return;
+
     //Freeing corpi
     free(model->corpus);
     free(model->clean_corpus);

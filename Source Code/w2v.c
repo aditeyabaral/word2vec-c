@@ -3,7 +3,7 @@
 int main()
 {
     bool train = false;
-    #if train
+    #if 0
     char *s = (char*)malloc(sizeof(char)*INT_MAX);
     scanf("%[^\\0]s", s);
     EMBEDDING* model = createModel();
@@ -13,8 +13,8 @@ int main()
     free(s);
     #endif
 
-    #if !train
-    EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
+    #if 1
+    EMBEDDING* model = loadModelForTraining("model-embeddings.csv", NULL, NULL, NULL, NULL, NULL, NULL);
     destroyModel(model);
     #endif
     return 0;  

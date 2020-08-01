@@ -144,7 +144,8 @@ void extractEmbeddings(EMBEDDING* model)
     {
         if (model->hashtable[i]!=NULL)
         {
-            model->hashtable[i]->wordvector = createZerosArray(1, model->dimension);
+            if (model->hashtable[i]->wordvector == NULL)
+                model->hashtable[i]->wordvector = createZerosArray(1, model->dimension);
             for(int j=0; j<model->dimension; j++)
                 model->hashtable[i]->wordvector[0][j] = W[j][i];
         }

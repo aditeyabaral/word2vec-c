@@ -105,9 +105,12 @@ void writeWeightsBiases(EMBEDDING* model);
 /* Call writeEmbeddings, writeParameters and writeCorpus */
 void saveModel(EMBEDDING* model, bool write_all);
 /* TBD */
+double** getMatrixFromFile(EMBEDDING* model, char* filename);
+void getFileDimensions(char* filename, int *m, int *n);
+bool checkFileExists(char* filename);
 EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
 /* Load vocabulary size and embedding dimension from file */
-void getFileDimensions(EMBEDDING* model, char* filename);
+void getEmbeddingFileDimensions(EMBEDDING* model, char* filename);
 /* Create hash table from text file containing the vocabulary */
 void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename);
 /* Load model from file */
