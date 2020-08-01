@@ -167,6 +167,7 @@ void saveModel(EMBEDDING* model, bool write_all)
     writeEmbeddings(model);
     writeParameters(model);
     writeWeightsBiases(model);
+    writeXY(model);
     if (write_all)
         writeCorpus(model);
 }
