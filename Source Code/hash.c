@@ -19,7 +19,12 @@ void insert(NODE* node, EMBEDDING* model)
     while(model->hashtable[index] != NULL)
     {
         if(!strcmp(model->hashtable[index]->word, node->word))
+        {
+            free(node->word);
+            free2D_int(node->onehotvector, 1, model->vocab_size);
+            free(node);
             return;
+        }
         index = (index+1)%model->vocab_size;
     }
     model->hashtable[index] = node;
