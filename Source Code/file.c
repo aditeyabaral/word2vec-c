@@ -175,6 +175,7 @@ void saveModel(EMBEDDING* model, bool write_all)
 
 EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename)
 {
+    printf("Loading model...\n");
     if(!(checkFileExists(X_filename) && checkFileExists(Y_filename) && checkFileExists(W1_filename) 
         && checkFileExists(W2_filename) && checkFileExists(b1_filename) && checkFileExists(b2_filename)))
     {
@@ -186,6 +187,7 @@ EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char
     int m, n;
     if (checkFileExists(embedding_filename))
     {
+        printf("Loading embeddings...\n");
         getFileDimensions(embedding_filename, &m, &n);
         model->vocab_size = m;
         model->dimension = n-1;
@@ -195,12 +197,19 @@ EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char
     getFileDimensions(X_filename, &m, &n);
     model->batch_size = m;
 
+    printf("Loading X...\n");
     model->X = getMatrixFromFile(model, X_filename);
+    printf("Loading y...\n");
     model->Y = getMatrixFromFile(model, Y_filename);
+    printf("Loading W1...\n");
     model->W1 = getMatrixFromFile(model, W1_filename);
+    printf("Loading W2...\n");
     model->W2 = getMatrixFromFile(model, W2_filename);
+    printf("Loading b1...\n");
     model->b1 = getMatrixFromFile(model, b1_filename);
+    printf("Loading b2...\n");
     model->b2 = getMatrixFromFile(model, b2_filename);
+    printf("Model loaded successfully\n");
     return model;
 }
 
@@ -243,6 +252,7 @@ void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename)
 
 EMBEDDING* loadModelEmbeddings(char* embedding_filename)
 {
+    printf("Loading model...\n");
     if(!checkFileExists(embedding_filename))
     {
         printf("File missing. Aborting...\n");
@@ -253,6 +263,8 @@ EMBEDDING* loadModelEmbeddings(char* embedding_filename)
     getFileDimensions(embedding_filename, &m, &n);
     model->vocab_size = m;
     model->dimension = n-1;
+    printf("Loading embeddings...\n");
     getEmbeddingParametersFromFile(model, embedding_filename);
+    printf("Model loaded successfully\n");
     return model;
 }

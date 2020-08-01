@@ -22,15 +22,19 @@ void free2D_int(int** M, int m, int n)
 
 void destroyModel(EMBEDDING* model)
 {
+    printf("Initiating Model Deletion...\n");
     if(model == NULL)
         return;
 
     //Freeing corpi
+    printf("Deleting corpi...\n");
     free(model->corpus);
     free(model->clean_corpus);
     free(model->vocab);
+    
 
     //Freeing weights and biases
+    printf("Deleting Weights & Biases...\n");
     free2D(model->W1, model->dimension, model->vocab_size);
     free2D(model->W2, model->vocab_size, model->dimension);
     free2D(model->b1, model->dimension, 1);
@@ -39,10 +43,12 @@ void destroyModel(EMBEDDING* model)
     free2D(model->A2, model->vocab_size, model->batch_size);
 
     //Freeing input
+    printf("Deleting X & y...\n");
     free2D(model->X, model->vocab_size, model->batch_size);
     free2D(model->Y, model->vocab_size, model->batch_size);
 
     //Freeing hashtable
+    printf("Deleting hashtable...\n");
     for(int i=0; i<model->vocab_size; ++i)
     {
         free2D(model->hashtable[i]->wordvector, 1, model->dimension);
@@ -53,5 +59,7 @@ void destroyModel(EMBEDDING* model)
     free(model->hashtable);
 
     //Free model object
+    printf("Deleting model...\n");
     free(model);
+    printf("Model destroyed\n");
 } 

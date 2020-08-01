@@ -1,25 +1,29 @@
 #include "header.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    bool train_model = true;
+    int train_model = atoi(argv[1]);
 
-    if (train_model)
+    if (train_model == 0)
     {
         char *s = (char*)malloc(sizeof(char)*INT_MAX);
         scanf("%[^\\0]s", s);
         EMBEDDING* model = createModel();
-        train(model, s, 3, 300, 5, 10, 1, true);
+        train(model, s, 3, 300, 5, 2, 1, true);
         saveModel(model, false);
         destroyModel(model);
         free(s);
     }
 
+    else if (train_model == 1)
+    {
+        EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
+        destroyModel(model);
+    }
     else
     {
-        //EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
-        EMBEDDING* model = loadModelForTraining("model-embeddings.csv", NULL, NULL, NULL, NULL, NULL, NULL);
-        destroyModel(model);
+        EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv");
+        //destroyModel(model);
     }
     return 0;  
 }
