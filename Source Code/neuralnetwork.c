@@ -152,7 +152,7 @@ void gradientDescent(EMBEDDING* model, bool save)
         if(save == true && i%100 == 0)
         {
             extractEmbeddings(model);
-            writeEmbeddings(model);
+            saveModel(model, false);
         }
     }
     printf("Training completed.\n\n");
