@@ -117,7 +117,7 @@ void writeXY(EMBEDDING* model)
         fprintf(fp, "%c", '\n');
     }
 
-    FILE* fp  = fopen("model-y.csv", "w");
+    fp  = fopen("model-y.csv", "w");
     for(int i = 0; i<model->vocab_size; i++)
     {
         for(int j = 0; j<model->batch_size; j++)

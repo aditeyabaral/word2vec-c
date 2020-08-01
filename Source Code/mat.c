@@ -183,7 +183,9 @@ int** createOneHot(NODE* node, EMBEDDING* model)
         index = (index+1)%model->vocab_size;
     }
     int** oneHotVector = (int**)malloc(sizeof(int*));
-    oneHotVector[0] = createZerosArray(1, model->vocab_size);
+    oneHotVector[0] = (int*)malloc(sizeof(int)*model->vocab_size);
+    for(int i=0; i < model->vocab_size; i++)
+        oneHotVector[0][i] = 0;
     oneHotVector[0][index] = 1;
     return oneHotVector;
 }
