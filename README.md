@@ -88,7 +88,8 @@ Note that this function will allow you to only use the embeddings and their asso
 To load a model for further training and usage, use 
 
 ```sh
-EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", "model-W1.csv", "model-W2.csv", "model-b1.csv", "model-b2.csv");
+EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", 
+                    "model-W1.csv", "model-W2.csv", "model-b1.csv", "model-b2.csv");
 ```
 The first argument - the embeddings file can be left NULL. 
 
