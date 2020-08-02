@@ -70,6 +70,18 @@ double** getMatrixFromFile(char* filename)
     return M;
 }
 
+void writeMatrixToFile(double** M, char* filename, int m, int n)
+{
+    FILE* fp  = fopen(filename, "w");
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+            fprintf(fp, "%lf,", M[i][j]);
+        fprintf(fp, "%c", '\n');
+    }
+    fclose(fp);
+}
+
 void writeEmbeddings(EMBEDDING* model)
 {
     FILE* fp  = fopen("model-embeddings.csv", "w");

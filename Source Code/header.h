@@ -108,6 +108,7 @@ void saveModel(EMBEDDING* model, bool write_all);
 double** getMatrixFromFile(char* filename);
 void getFileDimensions(char* filename, int *m, int *n);
 bool checkFileExists(char* filename);
+void writeMatrixToFile(double** M, char* filename, int m, int n);
 EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
 /* Load vocabulary size and embedding dimension from file */
 void getEmbeddingFileDimensions(EMBEDDING* model, char* filename);
