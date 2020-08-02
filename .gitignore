@@ -1,4 +1,4 @@
-Source Code/*.csv
-Source Code/*.out
-Source Code/*.exe
+*.csv
+*.out
+*.exe
 test.c
