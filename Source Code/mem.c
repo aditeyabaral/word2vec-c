@@ -48,7 +48,7 @@ void destroyModel(EMBEDDING* model)
     free2D(model->Y, model->vocab_size, model->batch_size);
 
     //Freeing hashtable
-    printf("Deleting hashtable...\n");
+    printf("Deleting HashTable...\n");
     for(int i=0; i<model->vocab_size; ++i)
     {
         free2D(model->hashtable[i]->wordvector, 1, model->dimension);
@@ -59,7 +59,7 @@ void destroyModel(EMBEDDING* model)
     free(model->hashtable);
 
     //Free model object
-    printf("Deleting model...\n");
+    printf("Deleting Model...\n");
     free(model);
-    printf("Model destroyed\n");
+    printf("Model destroyed\n\n");
 } 

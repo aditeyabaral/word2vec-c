@@ -44,6 +44,7 @@ double** getMatrixFromFile(EMBEDDING* model, char* filename)
 {
     int m, n, row, col;
     getFileDimensions(filename, &m, &n);
+    printf("Shape = (%d, %d)\n", m, n);
     double** M = createZerosArray(m, n);
 
     FILE* fp = fopen(filename, "r");
@@ -150,13 +151,11 @@ void writeWeightsBiases(EMBEDDING* model)
 
     fp  = fopen("model-bias-b1.csv", "w");
     for(int i = 0; i<model->dimension; i++)
-        fprintf(fp, "%lf,", model->b1[i][0]);
-    fprintf(fp, "%c", '\n');
+        fprintf(fp, "%lf,\n", model->b1[i][0]);
 
     fp  = fopen("model-bias-b2.csv", "w");
     for(int i = 0; i<model->vocab_size; i++)
-        fprintf(fp, "%lf,", model->b2[i][0]);
-    fprintf(fp, "%c", '\n');
+        fprintf(fp, "%lf,\n", model->b2[i][0]);
 
     fclose(fp);
     printf("Biases saved...\n");
@@ -191,6 +190,7 @@ EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char
         getFileDimensions(embedding_filename, &m, &n);
         model->vocab_size = m;
         model->dimension = n-1;
+        printf("Shape = (%d, %d)\n", model->vocab_size, model->dimension);
         getEmbeddingParametersFromFile(model, embedding_filename);
     }
 
@@ -209,7 +209,7 @@ EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char
     model->b1 = getMatrixFromFile(model, b1_filename);
     printf("Loading b2...\n");
     model->b2 = getMatrixFromFile(model, b2_filename);
-    printf("Model loaded successfully\n");
+    printf("Model loaded successfully\n\n");
     return model;
 }
 
@@ -265,6 +265,7 @@ EMBEDDING* loadModelEmbeddings(char* embedding_filename)
     model->dimension = n-1;
     printf("Loading embeddings...\n");
     getEmbeddingParametersFromFile(model, embedding_filename);
-    printf("Model loaded successfully\n");
+    printf("Shape = (%d, %d)\n", model->vocab_size, model->dimension);
+    printf("Model loaded successfully\n\n");
     return model;
 }
