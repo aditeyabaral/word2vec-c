@@ -40,7 +40,7 @@ void getFileDimensions(char* filename, int *m, int *n)
     fclose(fp);
 }
 
-double** getMatrixFromFile(EMBEDDING* model, char* filename)
+double** getMatrixFromFile(char* filename)
 {
     int m, n, row, col;
     getFileDimensions(filename, &m, &n);
@@ -198,17 +198,17 @@ EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char
     model->batch_size = m;
 
     printf("Loading X...\n");
-    model->X = getMatrixFromFile(model, X_filename);
+    model->X = getMatrixFromFile(X_filename);
     printf("Loading y...\n");
-    model->Y = getMatrixFromFile(model, Y_filename);
+    model->Y = getMatrixFromFile(Y_filename);
     printf("Loading W1...\n");
-    model->W1 = getMatrixFromFile(model, W1_filename);
+    model->W1 = getMatrixFromFile(W1_filename);
     printf("Loading W2...\n");
-    model->W2 = getMatrixFromFile(model, W2_filename);
+    model->W2 = getMatrixFromFile(W2_filename);
     printf("Loading b1...\n");
-    model->b1 = getMatrixFromFile(model, b1_filename);
+    model->b1 = getMatrixFromFile(b1_filename);
     printf("Loading b2...\n");
-    model->b2 = getMatrixFromFile(model, b2_filename);
+    model->b2 = getMatrixFromFile(b2_filename);
     printf("Model loaded successfully\n\n");
     return model;
 }
@@ -258,13 +258,17 @@ EMBEDDING* loadModelEmbeddings(char* embedding_filename)
         printf("File missing. Aborting...\n");
         return NULL;
     }
+    //exit(0);
     EMBEDDING* model = createModel();
+    //exit(0);
     int m, n;
     getFileDimensions(embedding_filename, &m, &n);
     model->vocab_size = m;
     model->dimension = n-1;
+    //exit(0);
     printf("Loading embeddings...\n");
     getEmbeddingParametersFromFile(model, embedding_filename);
+    //exit(0);
     printf("Shape = (%d, %d)\n", model->vocab_size, model->dimension);
     printf("Model loaded successfully\n\n");
     return model;

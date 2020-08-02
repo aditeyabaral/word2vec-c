@@ -105,7 +105,7 @@ void writeWeightsBiases(EMBEDDING* model);
 /* Call writeEmbeddings, writeParameters and writeCorpus */
 void saveModel(EMBEDDING* model, bool write_all);
 /* TBD */
-double** getMatrixFromFile(EMBEDDING* model, char* filename);
+double** getMatrixFromFile(char* filename);
 void getFileDimensions(char* filename, int *m, int *n);
 bool checkFileExists(char* filename);
 EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
