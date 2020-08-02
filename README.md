@@ -24,12 +24,11 @@ $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c func.c
 
 ## Execution
 
-A shell script has been included to make execution easy as well. Run the following commands: <br>
+A shell script has been included to make execution easy as well. Run the following command first: <br>
 ```sh
 $ chmod +x run.sh
-$ ./run.sh mode corpus
 ```
-There are 3 ways to execute the main file
+There are 3 ways to execute the ```run.sh``` script:
 
 | Mode | Function                                | Command                     |
 |------|-----------------------------------------|-----------------------------|
