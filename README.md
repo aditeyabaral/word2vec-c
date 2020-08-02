@@ -33,9 +33,9 @@ There are 3 ways to execute the main file
 
 | Mode | Corpus         | Function                                | Command            |
 |------|----------------|-----------------------------------------|--------------------|
-| 0    | Path to corpus | Train model with corpus                 | ./run.sh 0 corpus  |
-| 1    |                | Load only model embeddings              | ./run.sh 1         |
-| 2    |                | Load entire model (with neural network) | ./run.sh 2         |
+| 0    | Path to corpus | Train model with corpus                 | `./run.sh 0 corpus`  |
+| 1    |                | Load only model embeddings              | `./run.sh 1`         |
+| 2    |                | Load entire model (with neural network) | `./run.sh 2`         |
 
 ## Supported Functionalities
 
