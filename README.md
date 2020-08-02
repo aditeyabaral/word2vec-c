@@ -24,10 +24,18 @@ $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c func.c
 
 ## Execution
 
-Execute with input redirection, with the one command line argument being the path to the corpus.<br>
+A shell script has been included to make execution easy as well. Run the following commands: <br>
 ```sh
-$ ./a.out < path_to_corpus 
+$ chmod +x run.sh
+$ ./run.sh mode corpus
 ```
+There are 3 ways to execute the main file
+
+| Mode | Corpus         | Function                                | Command            |
+|------|----------------|-----------------------------------------|--------------------|
+| 0    | Path to corpus | Train model with corpus                 | ./run.sh 0 corpus  |
+| 1    |                | Load only model embeddings              | ./run.sh 1         |
+| 2    |                | Load entire model (with neural network) | ./run.sh 2         |
 
 ## Supported Functionalities
 
