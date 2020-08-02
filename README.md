@@ -56,10 +56,10 @@ To obtain a set of K words most similar to a given word (in decreasing order of 
 ```sh
 char* similar_words = mostSimilarByWord(model, word, k);
 ```
-### K Most Similar Words by Word
+### K Most Similar Words by Vector
 To obtain a set of K words most similar to a given vector (in decreasing order of similarity), use
 ```sh
-char* similar_words = mostSimilarByVector(model, word, k);
+char* similar_words = mostSimilarByVector(model, vector, k);
 ```
 
 ### Save Model Embeddings as CSV
