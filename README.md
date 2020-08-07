@@ -7,11 +7,16 @@ The implementation was built from scratch, from the text pre-processing to the n
 
 Note - All changes will also be pushed to [NLPC](https://github.com/aditeyabaral/NLPC).
 
-## How does it work?
+# How does it work?
 
-## Compilation
+To use Word2Vec-C, simply include the word2vec.h header file in your code. Compile your code with ```-lm``` to link with the required ```math.h``` header file. <br>
 
-To make compilation easy, a simple shell script has been included. Run the following commands:<br>
+Alternatively, you can also compile the source code files included.
+
+## Compiling from Source Code
+
+To compile Word2Vec-C with your source code, compile your files with all the dependency files. Replace w2v.c with your file(s). For easy compilation, a simple shell script has been included. Run the following commands:<br>
+
 ```sh
 $ chmod +x compile.sh
 $ ./compile.sh
@@ -22,84 +27,90 @@ Alternatively, compile all the source code files using <br>
 $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c func.c mem.c -lm
 ```
 
-To use Word2Vec-C with your source code, compile your files with all the dependency files. Replace w2v.c with your file(s).
-
 ## Execution
 
-A shell script has been included to make execution easy as well. Run the following command first: <br>
-```sh
-$ chmod +x run.sh
-```
-There are 3 ways to execute the ```run.sh``` script:
+To start using Word2Vec-C in your code, first create or load the model with one of the following instructions
 
-| Mode | Function                                | Command                     |
-|------|-----------------------------------------|-----------------------------|
-| 0    | Train model with corpus                 | ```./run.sh 0 corpus.txt``` |
-| 1    | Load only model embeddings              | ```./run.sh 1```            |
-| 2    | Load entire model (with neural network) | ```./run.sh 2```            |
-
-To start using Word2Vec-C in your code, first create or load the model with one of the following
+### Initialise Model
+Use this to create an empty model to train from scratch.
 
 ```sh
-EMBEDDING* model = createModel(); // use this to initialise and create model
+EMBEDDING* model = createModel();
 ```
+
+### Load Model Embeddings
+Use this to load only the model's embeddings
+
 ```sh
-EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv"); // use this load model embeddings
+EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
 ```
+
+### Load Model
+Use this to load the entire model - X, y, weights and bias
+
 ```sh
 EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", 
-                "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv"); 
-
-// use this to load the entire model
+                "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv");
 ```
+
 Now you can either train the model (if model has only been initialised) or used as needed. <br>
 Remember to call ```destroyModel(model)``` to free the model after use.
 
-## Supported Functionalities
+More information about loading as well as saving models can be found at the end of this README.
 
-### Train Model
+# Supported Functionalities
+
+## Train Model
 
 To train the model, use
 ```sh
 train(model, corpus, context_window, embedding_dimension, alpha, epochs, random_state, save_model_corpus);
 ```
 
-### Cosine Similarity 
+## Cosine Similarity 
 To find the cosine similarity between two words, use
 ```sh
 double sim = similarity(model, word1, word2);
 ```
-### Cosine Distance
+## Cosine Distance
 To find the cosine distance between two words, use 
 ```sh
 double dist = distance(model, word1, word2);
 ```
-### Extract Embeddings 
+## Extract Embeddings 
 To find a word's embedding, use
 ```sh
 double** vector = getVector(model, word);
 ```
-### Most Similar Word by Vector 
+## Most Similar Word by Vector 
 To obtain the word most similar to a vector, use
 ```sh
 char* word = getWord(model, vector);
 ```
-### K Most Similar Words by Word 
+## K Most Similar Words by Word 
 To obtain a set of K words most similar to a given word (in decreasing order of similarity), use
 ```sh
 char* similar_words = mostSimilarByWord(model, word, k);
 ```
-### K Most Similar Words by Vector
+## K Most Similar Words by Vector
 To obtain a set of K words most similar to a given vector (in decreasing order of similarity), use
 ```sh
 char* similar_words = mostSimilarByVector(model, vector, k);
 ```
 
-### Save Model Embeddings as CSV
+# Saving and Loading Models
+
+A model can be saved and loaded for further training as well as to extract embeddings for use. 
+
+## Saving a Model
 To save the model and its embeddings, use
+
 ```sh
-saveModel(model, save_coorpus);
+saveModel(model, save_corpus);
 ```
+The ```save_corpus`` argument is used to save the corpus used to train and takes in boolean values.
+
+## Loading a Model
 
 ### Load Model from Embeddings
 To load a model's embeddings, ensure that the embedding CSV file contains data in the following format
@@ -127,4 +138,4 @@ EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "
 The first argument - the embeddings file can be left NULL. 
 
 
-To support other functionalities like vector operations between embeddings, miscellaneous matrix operations have been added as well. More information about them can be found under Matrix Utilities in the header file.
+To support other functionalities like vector operations between embeddings, miscellaneous matrix operations have been added as well. More information about them can be found under ```MATRIX UTILITIES``` in the header file.
