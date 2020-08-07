@@ -38,7 +38,7 @@ There are 3 ways to execute the ```run.sh``` script:
 | 1    | Load only model embeddings              | ```./run.sh 1```            |
 | 2    | Load entire model (with neural network) | ```./run.sh 2```            |
 
-To start using Word2Vec-C in your code, first create or load the model with
+To start using Word2Vec-C in your code, first create or load the model with one of the following
 
 ```sh
 EMBEDDING* model = createModel(); // use this to initialise and create model
@@ -49,6 +49,7 @@ EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv"); // use this load
 ```sh
 EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", 
                 "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv"); 
+
 // use this to load the entire model
 ```
 Now you can either train the model (if model has only been initialised) or used as needed. <br>
@@ -97,7 +98,7 @@ char* similar_words = mostSimilarByVector(model, vector, k);
 ### Save Model Embeddings as CSV
 To save the model and its embeddings, use
 ```sh
-saveModel(model, true);
+saveModel(model, save_coorpus);
 ```
 
 ### Load Model from Embeddings
