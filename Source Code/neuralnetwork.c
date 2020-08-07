@@ -36,18 +36,6 @@ void forward_propagation(EMBEDDING* model)
     free2D(W2A1, model->vocab_size, model->batch_size);
     free2D(Z2, model->vocab_size, model->batch_size);
 
-    #if 0
-    printf("W1X:\n");
-    displayArray(W1X, model->dimension, model->batch_size);
-    printf("Z1:\n");
-    displayArray(model->Z1, model->dimension, model->batch_size);
-    printf("A1:\n");
-    displayArray(model->A1, model->dimension, model->batch_size);
-    printf("Z2:\n");
-    displayArray(model->Z2, model->vocab_size, model->batch_size);
-    printf("A2: \n");
-    displayArray(model->A2, model->vocab_size, model->batch_size);
-    #endif
 }
 
 void back_propagation(EMBEDDING* model)
@@ -92,26 +80,6 @@ void back_propagation(EMBEDDING* model)
     double** b2_diff_alpha_db2 = subtract(model->b2, alpha_db2, model->vocab_size, 1);
     free2D(model->b2, model->vocab_size, 1);
     model->b2 = b2_diff_alpha_db2;
-
-    #if 0
-    printf("dW1: \n");
-    displayArray(dW1, model->dimension, model->vocab_size);
-    printf("dW2: \n");
-    displayArray(dW2, model->vocab_size, model->dimension);
-    printf("db1: \n");
-    displayArray(db1, model->dimension, 1);
-    printf("db2 \n");
-    displayArray(db2, model->vocab_size, 1);
-    printf("After subtraction:\n\n");
-    printf("\nW1: \n");
-    displayArray(model->W1, model->dimension, model->vocab_size);
-    printf("\nW2: \n");
-    displayArray(model->W2, model->vocab_size, model->dimension);
-    printf("\nb1: \n");
-    displayArray(model->b1, model->dimension, 1);
-    printf("\nb2: \n");
-    displayArray(model->b2, model->vocab_size, 1);
-    #endif
 
     free2D(W2T, model->dimension, model->vocab_size);
     free2D(yhat_diff_y, model->vocab_size, model->batch_size);

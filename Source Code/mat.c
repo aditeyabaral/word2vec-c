@@ -18,10 +18,8 @@ double** relu(double** X, int m, int n)
 
 double** softmax(double** M, int m, int n, int axis)
 {
-    /* Allocating space for output 2D matrix*/
     double** softmax_out = createZerosArray(m, n);
 
-    /* Setting all values in output to be exp(corresponding value in input M) */
     for(int i=0; i<m; ++i)
     {
         for(int j=0; j<n; ++j)
@@ -30,7 +28,6 @@ double** softmax(double** M, int m, int n, int axis)
         }
     }
 
-    /* Calculating column and row sums of output matrix */
     double* colsums = (double*)malloc(n*sizeof(double));
     double* rowsums = (double*)malloc(m*sizeof(double));
     memset(rowsums, 0, m*sizeof(double));
@@ -45,7 +42,7 @@ double** softmax(double** M, int m, int n, int axis)
             sum += softmax_out[i][j];
         }
     }
-    if(axis==0)  /*Divide each element by its column sum*/
+    if(axis==0)  
     {
         for(int i=0; i<m; ++i)
         {
@@ -55,7 +52,7 @@ double** softmax(double** M, int m, int n, int axis)
             }
         }
     }
-    else if(axis==1) /*Divide each element by its row sum*/
+    else if(axis==1) 
     {
         for(int i=0; i<m; ++i)
         {
@@ -65,7 +62,7 @@ double** softmax(double** M, int m, int n, int axis)
             }
         }
     }
-    else /* Divide each element by matrix sum */
+    else 
     {
         for(int i=0; i<m; ++i)
         {

@@ -122,54 +122,18 @@ void writeCorpus(EMBEDDING* model)
 
 void writeXY(EMBEDDING* model)
 {
-    FILE* fp  = fopen("model-X.csv", "w");
-    for(int i = 0; i<model->vocab_size; i++)
-    {
-        for(int j = 0; j<model->batch_size; j++)
-            fprintf(fp, "%lf,", model->X[i][j]);
-        fprintf(fp, "%c", '\n');
-    }
-
-    fp  = fopen("model-y.csv", "w");
-    for(int i = 0; i<model->vocab_size; i++)
-    {
-        for(int j = 0; j<model->batch_size; j++)
-            fprintf(fp, "%lf,", model->Y[i][j]);
-        fprintf(fp, "%c", '\n');
-    }
-
-    fclose(fp);
+    writeMatrixToFile(model->X, "model-X.csv", model->vocab_size, model->batch_size);
+    writeMatrixToFile(model->Y, "model-y.csv", model->vocab_size, model->batch_size);
     printf("X and y saved...\n");
 }
 
 void writeWeightsBiases(EMBEDDING* model)
 {
-    FILE* fp  = fopen("model-weights-w1.csv", "w");
-    for(int i = 0; i<model->dimension; i++)
-    {
-        for(int j = 0; j<model->vocab_size; j++)
-            fprintf(fp, "%lf,", model->W1[i][j]);
-        fprintf(fp, "%c", '\n');
-    }
-
-    fp  = fopen("model-weights-w2.csv", "w");
-    for(int i = 0; i<model->vocab_size; i++)
-    {
-        for(int j = 0; j<model->dimension; j++)
-            fprintf(fp, "%lf,", model->W2[i][j]);
-        fprintf(fp, "%c", '\n');
-    }
+    writeMatrixToFile(model->W1, "model-weights-w1.csv", model->dimension, model->vocab_size);
+    writeMatrixToFile(model->W2, "model-weights-w2.csv", model->vocab_size, model->dimension);
     printf("Weights saved...\n");
-
-    fp  = fopen("model-bias-b1.csv", "w");
-    for(int i = 0; i<model->dimension; i++)
-        fprintf(fp, "%lf,\n", model->b1[i][0]);
-
-    fp  = fopen("model-bias-b2.csv", "w");
-    for(int i = 0; i<model->vocab_size; i++)
-        fprintf(fp, "%lf,\n", model->b2[i][0]);
-
-    fclose(fp);
+    writeMatrixToFile(model->b1, "model-bias-b1.csv", model->dimension, 1);
+    writeMatrixToFile(model->b2, "model-bias-b2.csv", model->vocab_size, 1);
     printf("Biases saved...\n");
 }
 
@@ -181,6 +145,7 @@ void saveModel(EMBEDDING* model, bool write_all)
     writeXY(model);
     if (write_all)
         writeCorpus(model);
+    printf("Model saved successfully...\n\n");
 }
 
 
@@ -270,17 +235,13 @@ EMBEDDING* loadModelEmbeddings(char* embedding_filename)
         printf("File missing. Aborting...\n");
         return NULL;
     }
-    //exit(0);
     EMBEDDING* model = createModel();
-    //exit(0);
     int m, n;
     getFileDimensions(embedding_filename, &m, &n);
     model->vocab_size = m;
     model->dimension = n-1;
-    //exit(0);
     printf("Loading embeddings...\n");
     getEmbeddingParametersFromFile(model, embedding_filename);
-    //exit(0);
     printf("Shape = (%d, %d)\n", model->vocab_size, model->dimension);
     printf("Model loaded successfully\n\n");
     return model;

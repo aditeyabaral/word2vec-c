@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
         char *s = (char*)malloc(sizeof(char)*INT_MAX);
         scanf("%[^\\0]s", s);
         EMBEDDING* model = createModel();
-        train(model, s, 3, 300, 5, 4, 1, false);
+        train(model, s, 3, 300, 0.1, 2, 0, false);
         saveModel(model, false);
         destroyModel(model);
         free(s);

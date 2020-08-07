@@ -104,17 +104,21 @@ void writeCorpus(EMBEDDING* model);
 void writeWeightsBiases(EMBEDDING* model);
 /* Call writeEmbeddings, writeParameters and writeCorpus */
 void saveModel(EMBEDDING* model, bool write_all);
-/* TBD */
+/* Reads a matrix from a csv file and returns it */
 double** getMatrixFromFile(char* filename);
+/* Stores the dimensions of the matrix stored in the csv file in m and n */
 void getFileDimensions(char* filename, int *m, int *n);
+/* Checks if a file exists in the current working directory */
 bool checkFileExists(char* filename);
+/* Writes a matrix of dimension m x n into a file */
 void writeMatrixToFile(double** M, char* filename, int m, int n);
+/* Load model embeddings, X, y, W1, W2, b1 and b2 from a file for further training */
 EMBEDDING* loadModelForTraining(char* embedding_filename, char* X_filename, char* Y_filename, char* W1_filename, char* W2_filename, char* b1_filename, char* b2_filename);
 /* Load vocabulary size and embedding dimension from file */
 void getEmbeddingFileDimensions(EMBEDDING* model, char* filename);
 /* Create hash table from text file containing the vocabulary */
 void getEmbeddingParametersFromFile(EMBEDDING* model, char* filename);
-/* Load model from file */
+/* Load model embeddings from file for use only*/
 EMBEDDING* loadModelEmbeddings(char* embedding_filename);
 
 /*

@@ -22,6 +22,8 @@ Alternatively, compile all the source code files using <br>
 $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c func.c mem.c -lm
 ```
 
+To use Word2Vec-C with your source code, compile your files with all the dependency files. Replace w2v.c with your file(s).
+
 ## Execution
 
 A shell script has been included to make execution easy as well. Run the following command first: <br>
@@ -36,7 +38,23 @@ There are 3 ways to execute the ```run.sh``` script:
 | 1    | Load only model embeddings              | ```./run.sh 1```            |
 | 2    | Load entire model (with neural network) | ```./run.sh 2```            |
 
+To start using Word2Vec-C in your code, first create or load the model with
+
+```sh
+EMBEDDING* model = createModel(); // use this to initialise and create model
+EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv"); // use this load model embeddings
+EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv"); // use this to load the entire model
+```
+Now you can either train the model (if model has only been initialised) or used as needed. Remember to call ```sh destroyModel(model);``` to free the model after use.
+
 ## Supported Functionalities
+
+### Train Model
+
+To train the model, use
+```sh
+train(model, corpus, context_window, embedding_dimension, alpha, epochs, random_state, save_model_corpus);
+```
 
 ### Cosine Similarity 
 To find the cosine similarity between two words, use
@@ -102,7 +120,3 @@ The first argument - the embeddings file can be left NULL.
 
 
 To support other functionalities like vector operations between embeddings, miscellaneous matrix operations have been added as well. More information about them can be found under Matrix Utilities in the header file.
-
-## Coming Soon
-
-* Fixing memory leaks
