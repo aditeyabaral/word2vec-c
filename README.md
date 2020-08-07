@@ -47,9 +47,12 @@ EMBEDDING* model = createModel(); // use this to initialise and create model
 EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv"); // use this load model embeddings
 ```
 ```sh
-EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv"); // use this to load the entire model
+EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", 
+                "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv"); 
+// use this to load the entire model
 ```
-Now you can either train the model (if model has only been initialised) or used as needed. Remember to call ```sh destroyModel(model);``` to free the model after use.
+Now you can either train the model (if model has only been initialised) or used as needed. <br>
+Remember to call ```destroyModel(model)``` to free the model after use.
 
 ## Supported Functionalities
 
