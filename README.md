@@ -9,13 +9,30 @@ Note - All changes will also be pushed to [NLPC](https://github.com/aditeyabaral
 
 # How does it work?
 
-To use Word2Vec-C, simply include the word2vec.h header file in your code. Compile your code with ```-lm``` to link with the required ```math.h``` header file. <br>
+## Using the Library
 
-Alternatively, you can also compile the source code files included.
+To use Word2Vec-C, the simplest way is to include the ```word2vec.h``` header file in your code. 
+
+```sh
+#include <stdio.h>
+#include "word2vec.h"
+int main(){
+    ...
+    ...
+}
+```
+
+Compile your code with ```-lm``` to link with the required ```math.h``` header file. <br>
+
+```sh
+$ gcc file.c -lm
+```
+
+Alternatively, you can also compile all the source code files included.
 
 ## Compiling from Source Code
 
-To compile Word2Vec-C with your source code, compile your files with all the dependency files. Replace w2v.c with your file(s). For easy compilation, a simple shell script has been included. Run the following commands:<br>
+To compile Word2Vec-C with your source code, compile your files with all the dependency files. Replace ```w2v.c``` with your file(s). For easy compilation, a simple shell script has been included. Run the following commands:<br>
 
 ```sh
 $ chmod +x compile.sh
@@ -53,8 +70,7 @@ EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "
                 "model-weights-w1.csv", "model-weights-w2.csv", "model-bias-b1.csv", "model-bias-b2.csv");
 ```
 
-Now you can either train the model (if model has only been initialised) or used as needed. <br>
-Remember to call ```destroyModel(model)``` to free the model after use.
+Now you can either train the model (if model has only been initialised) or used as needed. Remember to call ```destroyModel(model)``` to free the model after use.
 
 More information about loading as well as saving models can be found at the end of this README.
 
@@ -108,7 +124,7 @@ To save the model and its embeddings, use
 ```sh
 saveModel(model, save_corpus);
 ```
-The ```save_corpus`` argument is used to save the corpus used to train and takes in boolean values.
+The ```save_corpus``` argument is used to save the corpus used to train and takes in boolean values.
 
 ## Loading a Model
 
@@ -135,7 +151,7 @@ To load a model for further training and usage, use
 EMBEDDING* model = loadModelForTraining("model-embeddings.csv", "model-X.csv", "model-y.csv", 
                     "model-W1.csv", "model-W2.csv", "model-b1.csv", "model-b2.csv");
 ```
-The first argument - the embeddings file can be left NULL. 
+The first argument - the embeddings file can be left ```NULL```. 
 
 
 To support other functionalities like vector operations between embeddings, miscellaneous matrix operations have been added as well. More information about them can be found under ```MATRIX UTILITIES``` in the header file.
