@@ -44,25 +44,25 @@ Alternatively, compile all the source code files using <br>
 $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c func.c mem.c -lm
 ```
 
-# Using Word2Vec-C
+## Using Word2Vec-C
 
 To start using Word2Vec-C in your code, first create or load the model with one of the following instructions
 
-## Initialise Model
+### Initialise Model
 Use this to create an empty model to train from scratch.
 
 ```sh
 EMBEDDING* model = createModel();
 ```
 
-## Load Model Embeddings
+### Load Model Embeddings
 Use this to load only the model's embeddings
 
 ```sh
 EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
 ```
 
-## Load Model
+### Load Model
 Use this to load the entire model - X, y, weights and bias
 
 ```sh
@@ -76,39 +76,39 @@ More information about loading as well as saving models can be found at the end 
 
 # Supported Functionalities
 
-## Train Model
+### Train Model
 
 To train the model, use
 ```sh
 train(model, corpus, context_window, embedding_dimension, alpha, epochs, random_state, save_model_corpus);
 ```
 
-## Cosine Similarity 
+### Cosine Similarity 
 To find the cosine similarity between two words, use
 ```sh
 double sim = similarity(model, word1, word2);
 ```
-## Cosine Distance
+### Cosine Distance
 To find the cosine distance between two words, use 
 ```sh
 double dist = distance(model, word1, word2);
 ```
-## Extract Embeddings 
+### Extract Embeddings 
 To find a word's embedding, use
 ```sh
 double** vector = getVector(model, word);
 ```
-## Most Similar Word by Vector 
+### Most Similar Word by Vector 
 To obtain the word most similar to a vector, use
 ```sh
 char* word = getWord(model, vector);
 ```
-## K Most Similar Words by Word 
+### K Most Similar Words by Word 
 To obtain a set of K words most similar to a given word (in decreasing order of similarity), use
 ```sh
 char* similar_words = mostSimilarByWord(model, word, k);
 ```
-## K Most Similar Words by Vector
+### K Most Similar Words by Vector
 To obtain a set of K words most similar to a given vector (in decreasing order of similarity), use
 ```sh
 char* similar_words = mostSimilarByVector(model, vector, k);
