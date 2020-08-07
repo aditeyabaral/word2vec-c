@@ -44,25 +44,25 @@ Alternatively, compile all the source code files using <br>
 $ gcc w2v.c dep.c preprocess.c hash.c disp.c mat.c file.c neuralnetwork.c func.c mem.c -lm
 ```
 
-## Using Word2Vec-C
+# Using Word2Vec-C
 
 To start using Word2Vec-C in your code, first create or load the model with one of the following instructions
 
-### Initialise Model
+## Initialise Model
 Use this to create an empty model to train from scratch.
 
 ```sh
 EMBEDDING* model = createModel();
 ```
 
-### Load Model Embeddings
+## Load Model Embeddings
 Use this to load only the model's embeddings
 
 ```sh
 EMBEDDING* model = loadModelEmbeddings("model-embeddings.csv");
 ```
 
-### Load Model
+## Load Model
 Use this to load the entire model - X, y, weights and bias
 
 ```sh
