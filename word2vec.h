@@ -807,7 +807,7 @@ double cost(EMBEDDING* model)
     {
         sum = 0;
         for(int j = 0; j<model->vocab_size; j++)
-            sum+= (model->Y[j][i])*log(model->A2[j][i]) + (1-model->Y[j][i])*log(1-model->A2[j][j]);
+            sum+= (model->Y[j][i])*log(model->A2[j][i]);
         loss+= sum;
     }
     loss = (-1.0/m)*loss;
