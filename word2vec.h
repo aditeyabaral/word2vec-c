@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <stdbool.h>
-#include <limits.h>
-
 /*
 Store a word in the vocabulary,
 its embedding vector and its one hot

@@ -15,6 +15,11 @@ To use Word2Vec-C, the simplest way is to include the ```word2vec.h``` header fi
 
 ```sh
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <limits.h>
+#include <stdbool.h>
 #include "word2vec.h"
 int main(){
     ...
