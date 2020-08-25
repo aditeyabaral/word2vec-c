@@ -85,7 +85,8 @@ More information about loading as well as saving models can be found at the end 
 
 To train the model, use
 ```sh
-train(model, corpus, context_window, embedding_dimension, alpha, epochs, random_state, save_model_corpus);
+train(model, corpus, context_window, embedding_dimension, 
+        alpha, epochs, random_state, save_model_corpus);
 ```
 
 ### Cosine Similarity 
